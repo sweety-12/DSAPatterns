@@ -9,7 +9,7 @@
 ---
 
 > 🔥 **Ab mazza aega na, bhidu?**
-> *FAANG interview mein ghuse toh sahi — patterns pata hain toh bahar bhi nikalenge.* 😎
+> *FAANG interview mein ghuse toh sahi — patterns pata hain toh bahar feteh krke nikalenge.* 😎
 
 ---
 
