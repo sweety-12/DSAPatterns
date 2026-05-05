@@ -23,8 +23,9 @@ Exactly one solution exists
 
 
 Brute force : This can be easily solved by using nested loop but it is going to take TC : O(n2) so we will move to optimized appraoch
-
-Optimized Approach
+    
+------------------------------------------------------------------------------------
+Optimized Approach : This approach will take TC : O(N) and SC : O(N).
 
 vector<int>twoSum(vector<int>&nums, int target){
 
