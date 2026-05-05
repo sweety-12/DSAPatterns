@@ -125,36 +125,6 @@ Both pointers move in the same direction but at different speeds. The `read` poi
 
 ---
 
-### Pattern 6 — Sliding Window Variant
-
-```
-[2,  3,  1,  2,  4,  3]
- L—————R  →  window expands/shrinks
-```
-
-Two pointers define the left and right boundary of a window. The right pointer expands the window to include new elements; the left pointer shrinks it when a condition is violated. This pattern sits at the boundary between two pointers and sliding window — the window size is dynamic and driven by a constraint.
-
-**Problems**
-
-| # | Problem |
-|---|---------|
-| 1 | SubarrayProductLessThanK |
-| 2 | NumberOfSubArraysOfSizeKAndAverageGreaterThanOrEqualToThreshold |
-| 3 | SentenceScreenFitting |
-| 4 | DegreeOfAnArray |
-
----
-
-### Miscellaneous
-
-Problems where two pointers play a supporting role but another data structure (hash map, stack) is the primary tool.
-
-| # | Problem |
-|---|---------|
-| 1 | TwoSumIIIDataStructureDesign |
-
----
-
 ## Complexity Summary
 
 | Pattern | Time | Space |
