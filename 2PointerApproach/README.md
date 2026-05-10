@@ -140,3 +140,7 @@ Both pointers move in the same direction but at different speeds. The `read` poi
 
 > All solutions in this folder use the optimized two pointer approach.  
 > Problems sourced from a Meta engineer's curated list for MAANG interview preparation.
+
+
+Refer to this , if wants practice more
+https://leetcode.com/discuss/post/1688903/solved-all-two-pointers-problems-in-100-z56cn/
