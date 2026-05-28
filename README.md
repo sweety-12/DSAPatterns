@@ -8,18 +8,12 @@
 
 ---
 
-> 🔥 **Ab mazza aega na, bhidu?**
-> *FAANG interview mein ghuse toh sahi — patterns pata hain toh bahar feteh krke nikalenge.* 😎
-
----
-
 ## 📌 About
 
 Welcome to **DSAPatterns** — the only repo you'll ever need to stop crying during FAANG/MAANG interviews. 🎯
 
 This repository contains **all the major DSA patterns** asked by top tech companies like **Google, Amazon, Apple, Netflix, Meta** (and their desi cousins). Instead of grinding 500 random LeetCode problems like a headless chicken 🐔, learn the **patterns** — and suddenly everything clicks.
 
-> *"LeetCode pehle jungle tha. Ab? Apna ghar hai."* 🏠
 
 ---
 
@@ -99,5 +93,4 @@ If this repo saved you from a recursive stack overflow moment in an interview �
 
 <p align="center">
   Made with ❤️ and a lot of ☕ <br/>
-  <i>"Recursion ko samjho, life mein kuch bhi possible hai."</i>
 </p>
