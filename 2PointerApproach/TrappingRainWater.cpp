@@ -52,3 +52,30 @@ int mostWater(vector<int>&height){
 
 OPTIMIZED  APPROACH :
 TC : O(n) and SC : O(1)
+
+
+int mostWater(vector<int>& height) {
+    int n = height.size();
+    int left = 0, right = n-1;
+    int maxLeft = 0, maxRight = 0;
+    int water = 0;
+
+    while(left <= right) {
+        if(maxLeft <= maxRight) {
+            // update maxLeft
+            maxLeft = max(maxLeft, height[left]);
+            // add water
+            water += maxLeft -  height[left];
+            // move left
+            left++;
+        } else {
+            // update maxRight
+            maxRight = max(maxRight, height[right]);
+            // add water
+            water += maxRight - height[right];
+            // move right
+            right--;
+        }
+    }
+    return water;
+}
