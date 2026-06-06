@@ -55,4 +55,9 @@ TC : O(log n) and SC : O(1)
     }
 
 
+INBUILT FUNCTIONS FOR LOWER BOUND AND UPPER BOUND WHICH CAN BE DIRECTLY USED IN CODING ROUNDS OR IF ASKED IN INTERVIEWS.
+
+int lb = lower_bound(arr.begin(), arr.end(), n) - arr.begin();
+
+int ub = upper_bound(arr.begin(), arr.end(), n) - arr.begin();
             
