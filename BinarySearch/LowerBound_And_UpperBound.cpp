@@ -1,3 +1,8 @@
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+        ONLY DIFFERENCE IN LOWER BOUND AND UPPER BOUND IS "arr[ind] >= x" IN LOWER BOUND AND "arr[ind] > x" IN UPPER BOUND.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Problem Statement: Given a sorted array of N integers and an integer x, write a program to find the lower bound of x.
 
 What is lower bound?
@@ -53,7 +58,49 @@ TC : O(log n) and SC : O(1)
         }
         return ans;  
     }
+----------------------------------------------------------------------
+UPPER BOUND 
+Problem Statement: Given a sorted array of N integers and an integer x, write a program to find the upper bound of x.
 
+What is Upper Bound?
+The upper bound algorithm finds the first or the smallest index in a sorted array where the value at that index is greater than the given key i.e. x.
+
+The upper bound is the smallest index, ind, where arr[ind] > x.
+
+BRUTE FORCE APPROACH :
+TC : O(n) and SC : O(1)
+
+ int upperBound(vector<int> &arr, int x, int n) {
+        for (int i = 0; i < n; i++) {
+            if (arr[i] > x) {
+                return i; // First element strictly greater than x
+            }
+        }
+        return n; // If no such element exists, return n
+    }
+
+OPTIMIZED APPROACH :
+TC : O(log n) and SC : O(1)
+
+ int upperBound(vector<int> &arr, int x, int n) {
+        int low = 0, high = n - 1;
+        int ans = n;  // Default answer if x is >= all elements
+
+        while (low <= high) {
+            int mid = (low + high) / 2;
+
+            if (arr[mid] > x) {
+                ans = mid;        
+                high = mid - 1;   
+            } else {
+                low = mid + 1;    
+            }
+        }
+        return ans;  
+    }
+
+
+----------------------------------------------------------------------
 
 INBUILT FUNCTIONS FOR LOWER BOUND AND UPPER BOUND WHICH CAN BE DIRECTLY USED IN CODING ROUNDS OR IF ASKED IN INTERVIEWS.
 
