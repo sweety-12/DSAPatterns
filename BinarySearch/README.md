@@ -11,53 +11,52 @@ Time Complexity:  O(log n)
 Space Complexity: O(1) — iterative | O(log n) — recursive call stack
 ```
 
+> **Progress: 28 problems solved** across 6 patterns
+
 ---
 
 ## The Two Templates
-
-These two templates cover almost every binary search problem. Understand *when* to use each.
 
 ### Template 1 — `lo <= hi` (exact match search)
 
 Use when you're looking for a specific value and want to return `-1` if not found.
 
-```python
-def binary_search(nums, target):
-    lo, hi = 0, len(nums) - 1
+```cpp
+int binarySearch(vector<int>& nums, int target) {
+    int lo = 0, hi = nums.size() - 1;
 
-    while lo <= hi:
-        mid = lo + (hi - lo) // 2   # avoids integer overflow
+    while (lo <= hi) {
+        int mid = lo + (hi - lo) / 2;   // avoids integer overflow
 
-        if nums[mid] == target:
-            return mid
-        elif nums[mid] < target:
-            lo = mid + 1
-        else:
-            hi = mid - 1
-
-    return -1
+        if (nums[mid] == target) return mid;
+        else if (nums[mid] < target) lo = mid + 1;
+        else hi = mid - 1;
+    }
+    return -1;
+}
 ```
 
-### Template 2 — `lo < hi` (boundary / leftmost search)
+### Template 2 — `lo < hi` (boundary / answer space search)
 
-Use when you're finding the **first/last position** that satisfies a condition (predicate-based search).
+Use when finding the **first/last position** that satisfies a condition, or binary searching on an answer range.
 
-```python
-def binary_search_boundary(nums, target):
-    lo, hi = 0, len(nums)   # hi = len(nums), not len - 1
+```cpp
+int binarySearchBoundary(vector<int>& nums, int target) {
+    int lo = 0, hi = nums.size();   // hi = size, not size - 1
 
-    while lo < hi:
-        mid = lo + (hi - lo) // 2
+    while (lo < hi) {
+        int mid = lo + (hi - lo) / 2;
 
-        if condition(mid):   # e.g., nums[mid] >= target
-            hi = mid
-        else:
-            lo = mid + 1
-
-    return lo   # lo == hi at termination
+        if (condition(mid))   // e.g. nums[mid] >= target
+            hi = mid;
+        else
+            lo = mid + 1;
+    }
+    return lo;   // lo == hi at termination
+}
 ```
 
-> **Rule of thumb:** If you need an exact hit → Template 1. If you need a boundary or the answer to a yes/no predicate → Template 2.
+> **Rule of thumb:** Exact hit → Template 1. Boundary / predicate / answer space → Template 2.
 
 ---
 
@@ -65,176 +64,212 @@ def binary_search_boundary(nums, target):
 
 | Mistake | Fix |
 |---|---|
-| `mid = (lo + hi) // 2` can overflow in some languages | Use `lo + (hi - lo) // 2` |
-| `hi = mid` vs `hi = mid - 1` — wrong template mix | Match your `while` condition to your pointer moves |
-| Infinite loop when `lo` and `hi` are adjacent | Ensure one pointer always moves each iteration |
-| Wrong initial `hi` value | `len - 1` for Template 1, `len` for Template 2 |
+| `mid = (lo + hi) / 2` can overflow | Use `lo + (hi - lo) / 2` |
+| Mixing `hi = mid` with `lo <= hi` loop | Match pointer moves to your `while` condition |
+| Infinite loop when lo and hi are adjacent | One pointer must always move each iteration |
+| Wrong initial `hi` | `size - 1` for Template 1, `size` for Template 2 |
 
 ---
 
-## Patterns
+## Patterns & Solved Problems
 
 ---
 
-### Pattern 1 — Classic Binary Search on Sorted Array
+### Pattern 1 — Fundamentals (Lower/Upper Bound & Classic Search)
 
-**When to use:** Array is sorted. You want an exact value or its insertion position.
+**When to use:** Array is sorted. Finding exact values, boundaries, insertion positions, floor/ceil.
 
-**Key insight:** Standard lo/hi/mid. Get this down cold — every other pattern extends it.
+**Key insight:** `lower_bound` = first index where `arr[i] >= target`. `upper_bound` = first index where `arr[i] > target`. Everything else builds on these two.
 
-| # | Problem | Difficulty | Notes |
-|---|---|---|---|
-| 1 | [Binary Search](https://leetcode.com/problems/binary-search/) — LC 704 | 🟢 Easy | Textbook implementation |
-| 2 | [Search Insert Position](https://leetcode.com/problems/search-insert-position/) — LC 35 | 🟢 Easy | First position ≥ target |
-| 3 | [Find First and Last Position of Element](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/) — LC 34 | 🟡 Medium | Two binary searches |
-| 4 | Count of occurrences in sorted array | 🟡 Medium | `last - first + 1` |
-
----
-
-### Pattern 2 — Binary Search on Rotated / Modified Sorted Array
-
-**When to use:** Array was sorted but rotated at an unknown pivot. One half is always sorted — use that to decide where to search.
-
-**Key insight:** Check which half is sorted by comparing `nums[lo]` with `nums[mid]`. Then check if the target falls in the sorted half.
-
-```python
-# Rotated array template
-while lo <= hi:
-    mid = lo + (hi - lo) // 2
-    if nums[mid] == target:
-        return mid
-    if nums[lo] <= nums[mid]:          # left half is sorted
-        if nums[lo] <= target < nums[mid]:
-            hi = mid - 1
-        else:
-            lo = mid + 1
-    else:                               # right half is sorted
-        if nums[mid] < target <= nums[hi]:
-            lo = mid + 1
-        else:
-            hi = mid - 1
+```cpp
+// Lower Bound — first position where arr[i] >= target
+int lowerBound(vector<int>& arr, int target) {
+    int lo = 0, hi = arr.size();
+    while (lo < hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (arr[mid] >= target) hi = mid;
+        else lo = mid + 1;
+    }
+    return lo;
+}
 ```
 
-| # | Problem | Difficulty | Notes |
+| # | Problem | Difficulty | File |
 |---|---|---|---|
-| 1 | [Search in Rotated Sorted Array](https://leetcode.com/problems/search-in-rotated-sorted-array/) — LC 33 | 🟡 Medium | No duplicates |
-| 2 | [Search in Rotated Sorted Array II](https://leetcode.com/problems/search-in-rotated-sorted-array-ii/) — LC 81 | 🟡 Medium | With duplicates — worst case O(n) |
-| 3 | [Find Minimum in Rotated Sorted Array](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/) — LC 153 | 🟡 Medium | No duplicates |
-| 4 | [Find Minimum in Rotated Sorted Array II](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/) — LC 154 | 🔴 Hard | With duplicates |
+| 1 | Lower Bound & Upper Bound | 🟢 Easy | [`LowerBound_And_UpperBound.cpp`](./LowerBound_And_UpperBound.cpp) |
+| 2 | Floor and Ceil in Sorted Array | 🟢 Easy | [`floor_and_ceil.cpp`](./floor_and_ceil.cpp) |
+| 3 | Search Insert Position — LC 35 | 🟢 Easy | [`SearchInsertPosition.cpp`](./SearchInsertPosition.cpp) |
+| 4 | First and Last Occurrence — LC 34 | 🟡 Medium | [`firstAndLastOccurrence.cpp`](./firstAndLastOccurrence.cpp) |
+| 5 | Single Element in Sorted Array — LC 540 | 🟡 Medium | [`SingleElementInSortedArray.cpp`](./SingleElementInSortedArray.cpp) |
 
 ---
 
-### Pattern 3 — Binary Search on Answer Space
+### Pattern 2 — Binary Search on Rotated Sorted Array
 
-**When to use:** The array itself may not be sorted, but the *answer* lies in a monotonic value range. You binary search on possible answer values, not indices.
+**When to use:** Array was sorted but rotated at an unknown pivot.
 
-**Key insight:** Define a `feasible(mid)` function. If the answer space is monotonic (feasible for large values, not for small — or vice versa), binary search finds the tipping point.
+**Key insight:** One half is **always** sorted. Compare `nums[lo]` with `nums[mid]` to identify which half, then check if target falls in it.
 
-```python
-# General template
-lo, hi = min_possible_answer, max_possible_answer
-
-while lo < hi:
-    mid = lo + (hi - lo) // 2
-    if feasible(mid):
-        hi = mid          # mid could be the answer, don't discard it
-    else:
-        lo = mid + 1
-
-return lo
+```cpp
+// One half is always sorted — use that to decide direction
+if (nums[lo] <= nums[mid]) {          // left half is sorted
+    if (nums[lo] <= target && target < nums[mid])
+        hi = mid - 1;
+    else
+        lo = mid + 1;
+} else {                               // right half is sorted
+    if (nums[mid] < target && target <= nums[hi])
+        lo = mid + 1;
+    else
+        hi = mid - 1;
+}
 ```
 
-> This is the most important pattern for FAANG. Problems don't look like binary search — you have to recognize the monotonic property yourself.
-
-| # | Problem | Difficulty | Notes |
+| # | Problem | Difficulty | File |
 |---|---|---|---|
-| 1 | [Koko Eating Bananas](https://leetcode.com/problems/koko-eating-bananas/) — LC 875 | 🟡 Medium | Classic intro to this pattern |
-| 2 | [Capacity to Ship Packages Within D Days](https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/) — LC 1011 | 🟡 Medium | feasible = can ship in D days |
-| 3 | [Minimum Number of Days to Make m Bouquets](https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/) — LC 1482 | 🟡 Medium | Binary search on days |
-| 4 | [Split Array Largest Sum](https://leetcode.com/problems/split-array-largest-sum/) — LC 410 | 🔴 Hard | feasible = can split into ≤ k parts |
-| 5 | [Minimize Max Distance to Gas Station](https://leetcode.com/problems/minimize-max-distance-to-gas-station/) — LC 774 | 🔴 Hard | Binary search on floating point |
+| 1 | Search in Rotated Sorted Array — LC 33 | 🟡 Medium | [`SearchInRotatedSortedArray.cpp`](./SearchInRotatedSortedArray.cpp) |
+| 2 | Search in Rotated Sorted Array II — LC 81 | 🟡 Medium | [`SearchInRotatedArrayII.cpp`](./SearchInRotatedArrayII.cpp) |
+| 3 | Find Minimum in Rotated Sorted Array — LC 153 | 🟡 Medium | [`findMinimumInRotatedSortedArray.cpp`](./findMinimumInRotatedSortedArray.cpp) |
+| 4 | Find Number of Times Array is Rotated | 🟡 Medium | [`FindNoOfTimesArrayIsRotated.cpp`](./FindNoOfTimesArrayIsRotated.cpp) |
 
 ---
 
-### Pattern 4 — Finding a Peak / Local Extremum
+### Pattern 3 — Peak Finding
 
-**When to use:** Array has no full sorted guarantee, but you need a local maximum. Moving toward the larger neighbor always leads to a peak.
+**When to use:** No sorted guarantee — need a local maximum. Works in both 1D arrays and 2D grids.
 
-**Key insight:** If `nums[mid] < nums[mid+1]`, a peak exists to the right. Otherwise it exists to the left (or at mid). This gives a valid binary search even without global sorting.
+**Key insight:** Moving toward the **larger neighbor** always leads to a peak. If `nums[mid] < nums[mid+1]`, a peak exists to the right — otherwise to the left (or at mid).
 
-| # | Problem | Difficulty | Notes |
+| # | Problem | Difficulty | File |
 |---|---|---|---|
-| 1 | [Find Peak Element](https://leetcode.com/problems/find-peak-element/) — LC 162 | 🟡 Medium | 1D — O(log n) |
-| 2 | [Find a Peak Element II](https://leetcode.com/problems/find-a-peak-grid/) — LC 1901 | 🔴 Hard | 2D matrix — O(m log n) |
+| 1 | Find Peak Element — LC 162 | 🟡 Medium | [`FindPeakElement.cpp`](./FindPeakElement.cpp) |
+| 2 | Find Peak Element II — LC 1901 | 🔴 Hard | [`FindPeakElementII.cpp`](./FindPeakElementII.cpp) |
 
 ---
 
-### Pattern 5 — Binary Search on 2D Matrix
+### Pattern 4 — Binary Search on 2D Matrix
 
-**When to use:** Matrix rows and columns are sorted. Treat it as a flattened 1D sorted array.
+**When to use:** Searching or aggregating across rows/columns with sorted guarantees.
 
-**Key insight:** For an `m x n` matrix, map `index → (index // n, index % n)`. This only works when row `i` max < row `i+1` min (LC 74). If that's not guaranteed, use the staircase approach instead (LC 240).
+**Key insight:**
+- If row `i` max < row `i+1` min → flatten to 1D and standard binary search: `row = mid / cols`, `col = mid % cols`
+- If only rows and columns are individually sorted → staircase search from top-right corner: O(m + n)
+- For finding row with max ones → use lower bound on each row
 
-| # | Problem | Difficulty | Notes |
+| # | Problem | Difficulty | File |
 |---|---|---|---|
-| 1 | [Search a 2D Matrix](https://leetcode.com/problems/search-a-2d-matrix/) — LC 74 | 🟡 Medium | Flatten to 1D binary search |
-| 2 | [Search a 2D Matrix II](https://leetcode.com/problems/search-a-2d-matrix-ii/) — LC 240 | 🟡 Medium | Staircase search — O(m + n) |
+| 1 | Row With Maximum Ones | 🟢 Easy | [`RowWithMaximumOnes.cpp`](./RowWithMaximumOnes.cpp) |
+| 2 | Search a 2D Matrix — LC 74 | 🟡 Medium | [`SearchInA2DMatrix.cpp`](./SearchInA2DMatrix.cpp) |
+| 3 | Search a 2D Matrix II — LC 240 | 🟡 Medium | [`SearchIna2DMatrix2.cpp`](./SearchIna2DMatrix2.cpp) |
+| 4 | Median in a Row Wise Sorted Matrix | 🔴 Hard | [`MedianInARowWiseSortedMatrix.cpp`](./MedianInARowWiseSortedMatrix.cpp) |
 
 ---
 
-### Pattern 6 — Kth Smallest / Largest in Sorted Structure
+### Pattern 5 — Binary Search on Answer Space (MOST IMPORTANT PATTERN FOR FAANG/MNC's)
 
-**When to use:** You need the kth element across a sorted matrix, merged sorted lists, or a multiplication table — where extracting all values is expensive.
+**When to use:** The array itself may not be sorted, but the *answer* lies in a monotonic value range. Binary search on possible answer values, not indices.
 
-**Key insight:** Binary search on the value range `[lo, hi]`. For each `mid`, count how many elements are ≤ mid. Find the smallest value where `count >= k`.
+**Key insight:** Define a `feasible(mid)` function. If it's monotonic — works for large values, fails for small (or vice versa) — binary search finds the exact tipping point.
 
-```python
-lo, hi = min_val, max_val
+```cpp
+// General answer space template
+int lo = min_possible_answer, hi = max_possible_answer;
 
-while lo < hi:
-    mid = lo + (hi - lo) // 2
-    if count_less_equal(mid) >= k:
-        hi = mid
-    else:
-        lo = mid + 1
-
-return lo
+while (lo < hi) {
+    int mid = lo + (hi - lo) / 2;
+    if (feasible(mid))
+        hi = mid;       // mid could be the answer, don't discard it
+    else
+        lo = mid + 1;
+}
+return lo;
 ```
 
-| # | Problem | Difficulty | Notes |
+> ⚠️ **Most important pattern for FAANG.** Problems won't look like binary search — you have to spot the monotonic property yourself.
+
+| # | Problem | Difficulty | File |
 |---|---|---|---|
-| 1 | [Kth Smallest Element in a Sorted Matrix](https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/) — LC 378 | 🟡 Medium | Count ≤ mid using staircase |
-| 2 | [Kth Smallest Number in Multiplication Table](https://leetcode.com/problems/kth-smallest-number-in-multiplication-table/) — LC 668 | 🔴 Hard | Count with division per row |
-| 3 | [Find Kth Smallest Pair Distance](https://leetcode.com/problems/find-k-th-smallest-pair-distance/) — LC 719 | 🔴 Hard | Sort + sliding window for count |
-| 4 | [Median of Two Sorted Arrays](https://leetcode.com/problems/median-of-two-sorted-arrays/) — LC 4 | 🔴 Hard | Binary search on partition |
+| 1 | Sqrt of a Number — LC 69 | 🟢 Easy | [`sqrtOfNumber.cpp`](./sqrtOfNumber.cpp) |
+| 2 | Find Nth Root of a Number | 🟡 Medium | [`FindNthRootofANumber.cpp`](./FindNthRootofANumber.cpp) |
+| 3 | Koko Eating Bananas — LC 875 | 🟡 Medium | [`KokoEatingBananas.cpp`](./KokoEatingBananas.cpp) |
+| 4 | Find the Smallest Divisor — LC 1283 | 🟡 Medium | [`findTheSmallestDivisor.cpp`](./findTheSmallestDivisor.cpp) |
+| 5 | Minimum No. of Days to Make a Bouquet — LC 1482 | 🟡 Medium | [`MinuminNoOfDaysToMakeABouquet.cpp`](./MinuminNoOfDaysToMakeABouquet.cpp) |
+| 6 | Capacity to Ship Packages Within D Days — LC 1011 | 🟡 Medium | [`CapacityToShipPackagesWithinDdays.cpp`](./CapacityToShipPackagesWithinDdays.cpp) |
+| 7 | Book Allocation Problem | 🟡 Medium | [`bookAllocation.cpp`](./bookAllocation.cpp) |
+| 8 | Aggressive Cows | 🟡 Medium | [`AggressiveCows.cpp`](./AggressiveCows.cpp) |
+| 9 | Split Array Largest Sum — LC 410 | 🔴 Hard | [`SplitArrayLargestSum.cpp`](./SplitArrayLargestSum.cpp) |
+| 10 | Minimize Max Distance to Gas Stations — LC 774 | 🔴 Hard | [`minimizeMaxDistanceToGasStations.cpp`](./minimizeMaxDistanceToGasStations.cpp) |
 
 ---
 
-### Pattern 7 — Binary Search with Custom Predicate
+### Pattern 6 — Kth Element / Median Across Sorted Structures
 
-**When to use:** The comparison isn't a simple value check. You define a monotonic boolean predicate (false...false...true...true) and find the first `true`.
+**When to use:** Finding the kth smallest/largest across two sorted arrays, or the median across a sorted matrix — where merging everything is too expensive.
 
-**Key insight:** Any problem where you can write `is_valid(x)` that transitions exactly once from `False` to `True` across the search space is a binary search problem.
+**Key insight:** Binary search on the value range or on the partition. For two sorted arrays, binary search on a partition of the smaller array and balance both halves. For kth element, count how many elements are ≤ mid.
 
-| # | Problem | Difficulty | Notes |
+```cpp
+// Kth element across two sorted arrays — binary search on partition
+// Ensure nums1 is the smaller array
+int lo = max(0, k - (int)nums2.size());
+int hi = min(k, (int)nums1.size());
+
+while (lo <= hi) {
+    int cut1 = (lo + hi) / 2;
+    int cut2 = k - cut1;
+    // check max of left parts <= min of right parts
+}
+```
+
+| # | Problem | Difficulty | File |
 |---|---|---|---|
-| 1 | [H-Index II](https://leetcode.com/problems/h-index-ii/) — LC 275 | 🟡 Medium | Predicate: `nums[mid] >= n - mid` |
-| 2 | [Magnetic Force Between Two Balls](https://leetcode.com/problems/magnetic-force-between-two-balls/) — LC 1552 | 🟡 Medium | Greedy feasibility check |
-| 3 | [Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/) — LC 300 | 🟡 Medium | Patience sorting with BS |
-| 4 | [Russian Doll Envelopes](https://leetcode.com/problems/russian-doll-envelopes/) — LC 354 | 🔴 Hard | 2D LIS — sort trick + BS |
+| 1 | Find Kth Positive Number — LC 1539 | 🟢 Easy | [`FindKthPositiveNumber.cpp`](./FindKthPositiveNumber.cpp) |
+| 2 | Kth Element of Two Sorted Arrays | 🟡 Medium | [`kthElementOfTwoSortedArray.cpp`](./kthElementOfTwoSortedArray.cpp) |
+| 3 | Median of Two Sorted Arrays — LC 4 | 🔴 Hard | [`MedianOf2SortedArray.cpp`](./MedianOf2SortedArray.cpp) |
 
 ---
 
-## Suggested Practice Order
+## Problems by Difficulty
 
-```
-Week 1 → Pattern 1 (Classic) + Pattern 3 (Answer Space)
-Week 2 → Pattern 2 (Rotated Array) + Pattern 4 (Peak)
-Week 3 → Pattern 5 (2D Matrix) + Pattern 6 (Kth Smallest)
-Week 4 → Pattern 7 (Custom Predicate) + Revision
-```
+### 🟢 Easy (6)
+| Problem | Pattern | File |
+|---|---|---|
+| Lower Bound & Upper Bound | Fundamentals | [`LowerBound_And_UpperBound.cpp`](./LowerBound_And_UpperBound.cpp) |
+| Floor and Ceil | Fundamentals | [`floor_and_ceil.cpp`](./floor_and_ceil.cpp) |
+| Search Insert Position | Fundamentals | [`SearchInsertPosition.cpp`](./SearchInsertPosition.cpp) |
+| Row With Maximum Ones | 2D Matrix | [`RowWithMaximumOnes.cpp`](./RowWithMaximumOnes.cpp) |
+| Sqrt of a Number | Answer Space | [`sqrtOfNumber.cpp`](./sqrtOfNumber.cpp) |
+| Find Kth Positive Number | Kth Element | [`FindKthPositiveNumber.cpp`](./FindKthPositiveNumber.cpp) |
 
-> Start with Pattern 3 early — it's the most frequently tested at FAANG for 0–2 yrs exp and takes the most practice to recognize in the wild.
+### 🟡 Medium (17)
+| Problem | Pattern | File |
+|---|---|---|
+| First and Last Occurrence | Fundamentals | [`firstAndLastOccurrence.cpp`](./firstAndLastOccurrence.cpp) |
+| Single Element in Sorted Array | Fundamentals | [`SingleElementInSortedArray.cpp`](./SingleElementInSortedArray.cpp) |
+| Search in Rotated Sorted Array | Rotated Array | [`SearchInRotatedSortedArray.cpp`](./SearchInRotatedSortedArray.cpp) |
+| Search in Rotated Sorted Array II | Rotated Array | [`SearchInRotatedArrayII.cpp`](./SearchInRotatedArrayII.cpp) |
+| Find Minimum in Rotated Sorted Array | Rotated Array | [`findMinimumInRotatedSortedArray.cpp`](./findMinimumInRotatedSortedArray.cpp) |
+| Find No. of Times Array is Rotated | Rotated Array | [`FindNoOfTimesArrayIsRotated.cpp`](./FindNoOfTimesArrayIsRotated.cpp) |
+| Find Peak Element | Peak Finding | [`FindPeakElement.cpp`](./FindPeakElement.cpp) |
+| Search a 2D Matrix | 2D Matrix | [`SearchInA2DMatrix.cpp`](./SearchInA2DMatrix.cpp) |
+| Search a 2D Matrix II | 2D Matrix | [`SearchIna2DMatrix2.cpp`](./SearchIna2DMatrix2.cpp) |
+| Find Nth Root of a Number | Answer Space | [`FindNthRootofANumber.cpp`](./FindNthRootofANumber.cpp) |
+| Koko Eating Bananas | Answer Space | [`KokoEatingBananas.cpp`](./KokoEatingBananas.cpp) |
+| Find the Smallest Divisor | Answer Space | [`findTheSmallestDivisor.cpp`](./findTheSmallestDivisor.cpp) |
+| Min Days to Make a Bouquet | Answer Space | [`MinuminNoOfDaysToMakeABouquet.cpp`](./MinuminNoOfDaysToMakeABouquet.cpp) |
+| Capacity to Ship Packages | Answer Space | [`CapacityToShipPackagesWithinDdays.cpp`](./CapacityToShipPackagesWithinDdays.cpp) |
+| Book Allocation Problem | Answer Space | [`bookAllocation.cpp`](./bookAllocation.cpp) |
+| Aggressive Cows | Answer Space | [`AggressiveCows.cpp`](./AggressiveCows.cpp) |
+| Kth Element of Two Sorted Arrays | Kth Element | [`kthElementOfTwoSortedArray.cpp`](./kthElementOfTwoSortedArray.cpp) |
+
+### 🔴 Hard (5)
+| Problem | Pattern | File |
+|---|---|---|
+| Find Peak Element II | Peak Finding | [`FindPeakElementII.cpp`](./FindPeakElementII.cpp) |
+| Median in Row Wise Sorted Matrix | 2D Matrix | [`MedianInARowWiseSortedMatrix.cpp`](./MedianInARowWiseSortedMatrix.cpp) |
+| Split Array Largest Sum | Answer Space | [`SplitArrayLargestSum.cpp`](./SplitArrayLargestSum.cpp) |
+| Minimize Max Distance to Gas Stations | Answer Space | [`minimizeMaxDistanceToGasStations.cpp`](./minimizeMaxDistanceToGasStations.cpp) |
+| Median of Two Sorted Arrays | Kth Element | [`MedianOf2SortedArray.cpp`](./MedianOf2SortedArray.cpp) |
 
 ---
 
@@ -242,19 +277,38 @@ Week 4 → Pattern 7 (Custom Predicate) + Revision
 
 ```
 Is the array sorted?
-├── Yes → Classic BS (Pattern 1)
-│   ├── Array rotated? → Pattern 2
-│   └── Looking for boundary? → Template 2
+├── Yes, fully sorted
+│   ├── Exact value search?         → Template 1 (lo <= hi)
+│   ├── Boundary / floor / ceil?    → Template 2, lower/upper bound
+│   └── Single element anomaly?     → SingleElementInSortedArray
 │
-├── No, but answer is in a value range?
-│   └── Binary search on answer space (Pattern 3)
+├── Yes, but rotated?
+│   ├── Find target?                → SearchInRotatedSortedArray
+│   └── Find min / rotation count? → findMinimumInRotatedSortedArray
 │
-├── Need a local max/min?
-│   └── Peak finding (Pattern 4)
+├── Need local maximum?             → Peak Finding (Pattern 3)
 │
-├── 2D matrix?
-│   └── Flatten if fully sorted (Pattern 5), else staircase
+├── 2D Matrix?
+│   ├── Row[i] max < Row[i+1] min?  → Flatten to 1D (LC 74)
+│   ├── Rows & cols sorted?         → Staircase search (LC 240)
+│   └── Find median?                → Binary search on value range
 │
-└── Need Kth element across sorted structures?
-    └── Binary search on value + count (Pattern 6)
+├── Answer in a value range?        → Answer Space (Pattern 5)
+│   └── Ask: "can I feasibly achieve X?" → binary search on X
+│
+└── Kth element across sorted arrays?  → Partition binary search (Pattern 6)
 ```
+
+---
+
+## Pattern Summary
+
+| Pattern | Problems Solved | Key Technique |
+|---|---|---|
+| 1. Fundamentals | 5 | Lower/Upper bound templates |
+| 2. Rotated Array | 4 | Identify sorted half, decide direction |
+| 3. Peak Finding | 2 | Move toward larger neighbor |
+| 4. 2D Matrix | 4 | Flatten / staircase / value range |
+| 5. Answer Space | 10 | `feasible(mid)` monotonic check |
+| 6. Kth Element | 3 | Partition or count ≤ mid |
+| **Total** | **28** | |
