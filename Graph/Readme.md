@@ -27,7 +27,7 @@ Space Complexity:
 Usually O(V + E)
 ```
 
-> **Progress: XX problems solved across 7 graph patterns**
+> **Progress: 27 problems solved across 7 graph patterns**
 
 ---
 
@@ -134,12 +134,21 @@ for(int i=0;i<n;i++){
 }
 ```
 
-| # | Problem              | Difficulty |
-| - | -------------------- | ---------- |
-| 1 | Number of Provinces  | 🟢 Easy    |
-| 2 | Number of Islands    | 🟢 Easy    |
-| 3 | Flood Fill           | 🟢 Easy    |
-| 4 | Connected Components | 🟡 Medium  |
+| # | Problem                                   | Difficulty |
+| - | ----------------------------------------- | ---------- |
+| 1 | Number of Provinces                       | 🟢 Easy    |
+| 2 | Number of Islands                         | 🟢 Easy    |
+| 3 | Flood Fill                                | 🟢 Easy    |
+| 4 | Connected Components in Matrix            | 🟡 Medium  |
+| 5 | Rotten Oranges                            | 🟡 Medium  |
+| 6 | Distance of Nearest Cell Having 1         | 🟡 Medium  |
+| 7 | Surrounded Regions                        | 🟡 Medium  |
+| 8 | Number of Enclaves                        | 🟡 Medium  |
+| 9 | Bipartite Graph (DFS)                     | 🟡 Medium  |
+| 10 | Cycle Detection in Undirected Graph (BFS) | 🔴 Hard    |
+| 11 | Detect Cycle in Undirected Graph (DFS)    | 🔴 Hard    |
+| 12 | Word Ladder I                             | 🔴 Hard    |
+| 13 | Word Ladder II                            | 🔴 Hard    |
 
 ---
 
@@ -180,11 +189,15 @@ while(!q.empty()){
 }
 ```
 
-| # | Problem                        | Difficulty |
-| - | ------------------------------ | ---------- |
-| 1 | Shortest Path in Binary Matrix | 🟡 Medium  |
-| 2 | Network Delay Time             | 🟡 Medium  |
-| 3 | Path With Minimum Effort       | 🔴 Hard    |
+| # | Problem                                        | Difficulty |
+| - | ---------------------------------------------- | ---------- |
+| 1 | Shortest Path in Undirected Graph (unit weights) | 🔴 Hard  |
+| 2 | Shortest Path in DAG                           | 🔴 Hard    |
+| 3 | Dijkstra's Algorithm                           | 🔴 Hard    |
+| 4 | Shortest Distance in Binary Maze               | 🔴 Hard    |
+| 5 | Path with Minimum Effort                       | 🔴 Hard    |
+| 6 | Cheapest Flights Within K Stops                | 🔴 Hard    |
+| 7 | Network Delay Time                             | 🟡 Medium  |
 
 ---
 
@@ -220,9 +233,9 @@ Still in recursion stack
 
 | # | Problem                          | Difficulty |
 | - | -------------------------------- | ---------- |
-| 1 | Detect Cycle in Undirected Graph | 🟢 Easy    |
-| 2 | Detect Cycle in Directed Graph   | 🟡 Medium  |
-| 3 | Graph Valid Tree                 | 🟡 Medium  |
+| 1 | Detect Cycle in Undirected Graph (BFS) | 🔴 Hard |
+| 2 | Detect Cycle in Undirected Graph (DFS) | 🔴 Hard |
+| 3 | Detect Cycle in Directed Graph (DFS)   | 🔴 Hard |
 
 ---
 
@@ -256,11 +269,13 @@ for(auto neigh : adj[node]){
 }
 ```
 
-| # | Problem            | Difficulty |
-| - | ------------------ | ---------- |
-| 1 | Course Schedule    | 🟡 Medium  |
-| 2 | Course Schedule II | 🟡 Medium  |
-| 3 | Alien Dictionary   | 🔴 Hard    |
+| # | Problem                          | Difficulty |
+| - | -------------------------------- | ---------- |
+| 1 | Topo Sort (DFS)                  | 🔴 Hard    |
+| 2 | Topological Sort / Kahn's Algorithm | 🔴 Hard |
+| 3 | Course Schedule I                | 🔴 Hard    |
+| 4 | Course Schedule II               | 🟡 Medium  |
+| 5 | Alien Dictionary                 | 🔴 Hard    |
 
 ---
 
@@ -290,11 +305,12 @@ for(int i=0;i<n;i++){
 }
 ```
 
-| # | Problem         | Difficulty |
-| - | --------------- | ---------- |
-| 1 | Rotting Oranges | 🟡 Medium  |
-| 2 | 01 Matrix       | 🟡 Medium  |
-| 3 | Walls and Gates | 🟡 Medium  |
+| # | Problem                           | Difficulty |
+| - | --------------------------------- | ---------- |
+| 1 | Rotten Oranges                    | 🟡 Medium  |
+| 2 | 01 Matrix                         | 🟡 Medium  |
+| 3 | Distance of Nearest Cell Having 1 | 🟡 Medium  |
+| 4 | Word Ladder I                     | 🔴 Hard    |
 
 ---
 
@@ -326,12 +342,13 @@ int find(int node){
 }
 ```
 
-| # | Problem                   | Difficulty |
-| - | ------------------------- | ---------- |
-| 1 | Number of Provinces (DSU) | 🟡 Medium  |
-| 2 | Redundant Connection      | 🟡 Medium  |
-| 3 | Make Network Connected    | 🟡 Medium  |
-| 4 | Accounts Merge            | 🔴 Hard    |
+| # | Problem                                    | Difficulty |
+| - | ------------------------------------------ | ---------- |
+| 1 | Disjoint Set (Union Find)                  | 🔴 Hard    |
+| 2 | Number of Provinces (DSU)                  | 🟡 Medium  |
+| 3 | Make Network Connected                     | 🟡 Medium  |
+| 4 | Accounts Merge                             | 🔴 Hard    |
+| 5 | Number of Islands II                       | 🔴 Hard    |
 
 ---
 
@@ -355,12 +372,14 @@ int drow[4] = {-1,0,1,0};
 int dcol[4] = {0,1,0,-1};
 ```
 
-| # | Problem                        | Difficulty |
-| - | ------------------------------ | ---------- |
-| 1 | Number of Islands              | 🟢 Easy    |
-| 2 | Flood Fill                     | 🟢 Easy    |
-| 3 | Surrounded Regions             | 🟡 Medium  |
-| 4 | Shortest Path in Binary Matrix | 🟡 Medium  |
+| # | Problem                           | Difficulty |
+| - | --------------------------------- | ---------- |
+| 1 | Number of Islands                 | 🟢 Easy    |
+| 2 | Flood Fill                        | 🟢 Easy    |
+| 3 | Surrounded Regions                | 🟡 Medium  |
+| 4 | Number of Enclaves                | 🟡 Medium  |
+| 5 | Shortest Distance in Binary Maze  | 🔴 Hard    |
+| 6 | Path with Minimum Effort          | 🔴 Hard    |
 
 ---
 
@@ -408,16 +427,104 @@ Need to visit everything?
 
 ## Pattern Summary
 
-| Pattern             | Key Technique                    |
-| ------------------- | -------------------------------- |
-| 1. Traversal        | DFS / BFS                        |
-| 2. Shortest Path    | BFS / Dijkstra                   |
-| 3. Cycle Detection  | Parent / Recursion Stack         |
-| 4. Topological Sort | Kahn's Algorithm                 |
-| 5. Multi-source BFS | Push all sources                 |
-| 6. DSU              | Path Compression + Union by Size |
-| 7. Grid as Graph    | Direction Arrays                 |
+| Pattern             | Key Technique                    | Solved |
+| ------------------- | -------------------------------- | ------ |
+| 1. Traversal        | DFS / BFS                        | 13     |
+| 2. Shortest Path    | BFS / Dijkstra                   | 7      |
+| 3. Cycle Detection  | Parent / Recursion Stack         | 3      |
+| 4. Topological Sort | Kahn's Algorithm                 | 5      |
+| 5. Multi-source BFS | Push all sources                 | 4      |
+| 6. DSU              | Path Compression + Union by Size | 5      |
+| 7. Grid as Graph    | Direction Arrays                 | 6      |
 
 | Total Patterns      | 7                       |
 | ------------------- | ----------------------- |
+| Total Solved        | 27                      |
 | Interview Readiness | Strong SDE-1 Foundation |
+
+
+
+---
+
+## Striver A-Z Graph Series — Full Tracker
+
+> 27 / 43 solved &nbsp;|&nbsp; 16 remaining
+
+### Traversal (DFS / BFS) — 13 / 13 ✅
+
+| # | Problem | Difficulty | Status |
+| - | ------- | ---------- | ------ |
+| 1 | Number of Provinces | 🟡 Medium | ✅ Done |
+| 2 | Connected Components in Matrix | 🟡 Medium | ✅ Done |
+| 3 | Rotten Oranges | 🟡 Medium | ✅ Done |
+| 4 | Flood Fill | 🟡 Medium | ✅ Done |
+| 5 | Distance of Nearest Cell Having 1 | 🟡 Medium | ✅ Done |
+| 6 | Surrounded Regions | 🟡 Medium | ✅ Done |
+| 7 | Number of Enclaves | 🟡 Medium | ✅ Done |
+| 8 | Number of Islands | 🟡 Medium | ✅ Done |
+| 9 | Bipartite Graph (DFS) | 🔴 Hard | ✅ Done |
+| 10 | Cycle Detection in Undirected Graph (BFS) | 🔴 Hard | ✅ Done |
+| 11 | Detect Cycle in Undirected Graph (DFS) | 🔴 Hard | ✅ Done |
+| 12 | Word Ladder I | 🔴 Hard | ✅ Done |
+| 13 | Word Ladder II | 🔴 Hard | ✅ Done |
+
+---
+
+### Topo Sort and Problems — 6 / 7
+
+| # | Problem | Difficulty | Status |
+| - | ------- | ---------- | ------ |
+| 1 | Topo Sort (DFS) | 🔴 Hard | ✅ Done |
+| 2 | Topological Sort / Kahn's Algorithm | 🔴 Hard | ✅ Done |
+| 3 | Detect Cycle in Directed Graph (DFS) | 🔴 Hard | ✅ Done |
+| 4 | Course Schedule I | 🔴 Hard | ✅ Done |
+| 5 | Course Schedule II | 🟡 Medium | ✅ Done |
+| 6 | Alien Dictionary | 🔴 Hard | ✅ Done |
+| 7 | Find Eventual Safe States | 🔴 Hard | ⏳ Pending |
+
+---
+
+### Shortest Path Algorithms — 7 / 13
+
+| # | Problem | Difficulty | Status |
+| - | ------- | ---------- | ------ |
+| 1 | Shortest Path in Undirected Graph (unit weights) | 🔴 Hard | ✅ Done |
+| 2 | Shortest Path in DAG | 🔴 Hard | ✅ Done |
+| 3 | Dijkstra's Algorithm | 🔴 Hard | ✅ Done |
+| 4 | Shortest Distance in Binary Maze | 🔴 Hard | ✅ Done |
+| 5 | Path with Minimum Effort | 🔴 Hard | ✅ Done |
+| 6 | Cheapest Flights Within K Stops | 🔴 Hard | ✅ Done |
+| 7 | Network Delay Time | 🟡 Medium | ✅ Done |
+| 8 | Why Priority Queue in Dijkstra | 🔴 Hard | ⏳ Pending |
+| 9 | Number of Ways to Arrive at Destination | 🔴 Hard | ⏳ Pending |
+| 10 | Minimum Multiplications to Reach End | 🔴 Hard | ⏳ Pending |
+| 11 | Bellman Ford Algorithm | 🔴 Hard | ⏳ Pending |
+| 12 | Floyd Warshall Algorithm | 🔴 Hard | ⏳ Pending |
+| 13 | Find City with Smallest Number of Neighbors | 🔴 Hard | ⏳ Pending |
+
+---
+
+### MST / Disjoint Set — 4 / 10
+
+| # | Problem | Difficulty | Status |
+| - | ------- | ---------- | ------ |
+| 1 | Disjoint Set (Union Find) | 🔴 Hard | ✅ Done |
+| 2 | Number of Operations to Make Network Connected | 🔴 Hard | ✅ Done |
+| 3 | Accounts Merge | 🔴 Hard | ✅ Done |
+| 4 | Number of Islands II | 🔴 Hard | ✅ Done |
+| 5 | MST Theory | 🟢 Easy | ⏳ Pending |
+| 6 | Prim's Algorithm | 🔴 Hard | ⏳ Pending |
+| 7 | Find MST Weight (Kruskal's) | 🔴 Hard | ⏳ Pending |
+| 8 | Most Stones Removed with Same Row/Column | 🟡 Medium | ⏳ Pending |
+| 9 | Making a Large Island | 🔴 Hard | ⏳ Pending |
+| 10 | Swim in Rising Water | 🟡 Medium | ⏳ Pending |
+
+---
+
+### Other Algorithms — 0 / 3
+
+| # | Problem | Difficulty | Status |
+| - | ------- | ---------- | ------ |
+| 1 | Bridges in Graph | 🔴 Hard | ⏳ Pending |
+| 2 | Articulation Point in Graph | 🔴 Hard | ⏳ Pending |
+| 3 | Kosaraju's Algorithm (SCC) | 🔴 Hard | ⏳ Pending |
