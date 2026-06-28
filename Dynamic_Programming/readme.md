@@ -2,308 +2,398 @@
 
 ## What is Dynamic Programming?
 
-Dynamic Programming (DP) is an optimization technique that solves complex problems by breaking them into **overlapping subproblems**, solving each subproblem only once, and storing the result to avoid recomputation.
+Dynamic Programming (DP) is an optimization technique used to solve complex problems by breaking them into **overlapping subproblems**, solving each subproblem only once, and storing the results to avoid repeated computation.
 
-**Core idea:** If a problem has **optimal substructure** (optimal solution built from optimal sub-solutions) and **overlapping subproblems** (same subproblem solved multiple times), DP applies. Identify the recurrence, then either memoize top-down or build bottom-up.
+**Core Idea:** If a problem has:
 
-```
-Time Complexity:  O(n²) or O(n³) depending on problem
+* **Optimal Substructure** — the optimal solution can be built from optimal solutions of smaller subproblems.
+* **Overlapping Subproblems** — the same subproblems are solved multiple times.
+
+Then DP can significantly reduce the time complexity by reusing previously computed results.
+
+```text
+Time Complexity:  O(n²) or O(n³) depending on the problem
 Space Complexity: O(n) or O(n²) for the DP table
 ```
 
-> **Progress: 30 problems solved** across 5 patterns
+> **Progress:** 30 problems solved across 5 major DP patterns.
 
 ---
 
-## How to Identify a DP Problem
+# How to Identify a DP Problem
 
-```
+```text
 Does the problem ask for:
 ├── Count the number of ways?         → DP (usually)
 ├── Minimum / Maximum of something?   → DP (usually)
-├── Is it possible / true / false?    → DP (usually)
-└── Find the longest / shortest?      → DP (usually)
+├── Is it possible (True / False)?    → DP (usually)
+└── Find the Longest / Shortest?      → DP (usually)
 
 AND does it have:
-├── Overlapping subproblems?          → Memoization will help
-└── Optimal substructure?             → DP is applicable
+├── Overlapping subproblems?          → Memoization helps
+└── Optimal substructure?             → DP applies
 ```
 
-> **Rule of thumb:** If brute force is exponential and you're recomputing the same states, DP is the tool.
+> **Rule of Thumb:** If the brute-force solution is exponential and repeatedly solves the same states, Dynamic Programming is probably the right approach.
 
 ---
 
-## The Three Steps to Solve Any DP Problem
+# Three Steps to Solve Any DP Problem
 
-```
+```text
 Step 1 — Recursive (Brute Force)
-         Write the plain recursion. Don't optimize yet.
-         Identify base cases and the recurrence relation.
-         ↓
+         Write the plain recursive solution.
+         Identify the recurrence and base cases.
+                    ↓
 Step 2 — Memoization (Top-Down)
-         Add a dp[][] table. Before computing, check if already solved.
-         Store result before returning.
-         ↓
+         Store answers in a DP table.
+         Return cached results whenever possible.
+                    ↓
 Step 3 — Tabulation (Bottom-Up)
-         Convert recursion to iteration.
-         Fill the table from base cases upward.
-         Optionally optimize space.
+         Convert recursion into iteration.
+         Build the DP table from base cases upward.
+         Optimize space whenever possible.
 ```
 
 ---
 
-## Common Off-by-One Pitfalls
+# Common Off-by-One Pitfalls
 
-| Mistake | Fix |
-|---|---|
-| Wrong base case | Dry run with n=0 and n=1 explicitly |
-| Forgetting to initialize dp table with -1 | Use `memset(dp, -1, sizeof(dp))` before memoization |
-| Index mismatch between string and dp table | Shift string index by +1 when dp is 1-indexed |
-| Mixing i=0 (item) with i=0 (capacity) | Keep separate loops clear — items outer, capacity inner |
-| Printing DP solution without backtracking | Always trace back through the table, not recompute |
-
----
-
-## Patterns & Solved Problems
+| Mistake                                | Fix                                               |
+| -------------------------------------- | ------------------------------------------------- |
+| Wrong base case                        | Dry run with `n = 0` and `n = 1`                  |
+| Forgetting to initialize DP table      | Initialize with `-1` before memoization           |
+| String index mismatch                  | Shift indices if DP is 1-indexed                  |
+| Mixing item index and capacity index   | Keep loop meanings consistent                     |
+| Printing solution without backtracking | Trace through the DP table instead of recomputing |
 
 ---
 
-### Pattern 1 — 0/1 Knapsack
+# DP Patterns
 
-**When to use:** You have N items each with a weight and value. A capacity W is given. Each item can be picked **at most once**. Find optimal selection.
+---
 
-**Key insight:** At every item, you have exactly two choices — **take it** or **leave it**. If you take it, capacity reduces. If you leave it, move to next item at same capacity. This binary choice is the hallmark of 0/1 Knapsack. All 7 problems below are disguised versions of this same recurrence.
+# Pattern 1 — 0/1 Knapsack
+
+### When to use
+
+You have **N items**, each with a **weight** and **value**, along with a capacity **W**.
+
+Each item can be chosen **at most once**.
+
+### Key Insight
+
+At every item, you have exactly two choices:
+
+* Take the item
+* Leave the item
+
+Taking an item decreases the remaining capacity, while leaving it simply moves to the next item.
+
+This simple **take-or-leave** decision forms the basis of many problems.
 
 ```cpp
-// 0/1 Knapsack — Top Down DP
-int knapsack(int W, vector<int>& wt, vector<int>& val, int n, vector<vector<int>>& dp) {
-    if (n == 0 || W == 0) return 0;
-    if (dp[n][W] != -1) return dp[n][W];
+// 0/1 Knapsack — Memoization
+int knapsack(int W, vector<int>& wt, vector<int>& val,
+             int n, vector<vector<int>>& dp) {
+
+    if (n == 0 || W == 0)
+        return 0;
+
+    if (dp[n][W] != -1)
+        return dp[n][W];
 
     if (wt[n-1] <= W)
         return dp[n][W] = max(
-            val[n-1] + knapsack(W - wt[n-1], wt, val, n-1, dp),  // take
-            knapsack(W, wt, val, n-1, dp)                          // leave
+            val[n-1] + knapsack(W - wt[n-1], wt, val, n-1, dp),
+            knapsack(W, wt, val, n-1, dp)
         );
-    else
-        return dp[n][W] = knapsack(W, wt, val, n-1, dp);          // can't take
+
+    return dp[n][W] = knapsack(W, wt, val, n-1, dp);
 }
 ```
 
-| # | Problem | Difficulty | File |
-|---|---|---|---|
-| 1 | 0/1 Knapsack (Recursive → Memoization → Top Down) | 🟡 Medium | [`01Knapsack.java`](./01Knapsack.java) |
-| 2 | Subset Sum Problem | 🟡 Medium | [`SubsetSum.java`](./SubsetSum.java) |
-| 3 | Equal Sum Partition Problem | 🟡 Medium | [`EqualSumPartition.java`](./EqualSumPartition.java) |
-| 4 | Count of Subsets with Given Sum | 🟡 Medium | [`CountOfSubsetsWithGivenSum.java`](./CountOfSubsetsWithGivenSum.java) |
-| 5 | Minimum Subset Sum Difference | 🔴 Hard | [`MinimumSubsetSumDifference.java`](./MinimumSubsetSumDifference.java) |
-| 6 | Count Subsets with Given Difference | 🟡 Medium | [`CountSubsetsWithGivenDifference.java`](./CountSubsetsWithGivenDifference.java) |
-| 7 | Target Sum — LC 494 | 🟡 Medium | [`TargetSum.java`](./TargetSum.java) |
+### Problems
+
+| # | Problem                                           | Difficulty |
+| - | ------------------------------------------------- | ---------- |
+| 1 | 0/1 Knapsack (Recursive → Memoization → Top Down) | 🟡 Medium  |
+| 2 | Subset Sum Problem                                | 🟡 Medium  |
+| 3 | Equal Sum Partition                               | 🟡 Medium  |
+| 4 | Count of Subsets with Given Sum                   | 🟡 Medium  |
+| 5 | Minimum Subset Sum Difference                     | 🔴 Hard    |
+| 6 | Count Subsets with Given Difference               | 🟡 Medium  |
+| 7 | Target Sum (LC 494)                               | 🟡 Medium  |
 
 ---
 
-### Pattern 2 — Unbounded Knapsack
+# Pattern 2 — Unbounded Knapsack
 
-**When to use:** Same setup as 0/1 Knapsack but each item can be picked **unlimited times**. The capacity shrinks but the item index does not move forward on a pick.
+### When to use
 
-**Key insight:** The only change from 0/1 Knapsack — when you **take** an item, stay at the same index `n` instead of moving to `n-1`. This single line difference unlocks infinite reuse of each item.
+Each item can be picked **unlimited times**.
+
+### Key Insight
+
+The only difference from 0/1 Knapsack:
+
+* **Take → stay on the same item**
+* **Leave → move to the previous item**
 
 ```cpp
-// Unbounded Knapsack — key difference from 0/1
 if (wt[n-1] <= W)
     return dp[n][W] = max(
-        val[n-1] + knapsack(W - wt[n-1], wt, val, n, dp),   // take — stay at n (not n-1)
-        knapsack(W, wt, val, n-1, dp)                         // leave
+        val[n-1] + knapsack(W - wt[n-1], wt, val, n, dp),
+        knapsack(W, wt, val, n-1, dp)
     );
 ```
 
-| # | Problem | Difficulty | File |
-|---|---|---|---|
-| 1 | Unbounded Knapsack | 🟡 Medium | [`UnboundedKnapsack.java`](./UnboundedKnapsack.java) |
-| 2 | Rod Cutting Problem | 🟡 Medium | [`RodCutting.java`](./RodCutting.java) |
-| 3 | Coin Change — Maximum Number of Ways | 🟡 Medium | [`CoinChangeMaxWays.java`](./CoinChangeMaxWays.java) |
-| 4 | Coin Change — Minimum Number of Coins — LC 322 | 🟡 Medium | [`CoinChangeMinCoins.java`](./CoinChangeMinCoins.java) |
+### Problems
+
+| # | Problem                              | Difficulty |
+| - | ------------------------------------ | ---------- |
+| 1 | Unbounded Knapsack                   | 🟡 Medium  |
+| 2 | Rod Cutting                          | 🟡 Medium  |
+| 3 | Coin Change — Maximum Ways           | 🟡 Medium  |
+| 4 | Coin Change — Minimum Coins (LC 322) | 🟡 Medium  |
 
 ---
 
-### Pattern 3 — Longest Common Subsequence (LCS)
+# Pattern 3 — Longest Common Subsequence (LCS)
 
-**When to use:** Two strings are given. Problem involves finding commonality, similarity, or transformation cost between them. Subsequences, substrings, palindromes, and edit distances all reduce to LCS variants.
+### When to use
 
-**Key insight:** Compare characters at `i` and `j`. If they match, both pointers move inward and you gain 1. If they don't match, try skipping from either string and take the best. This 2D recurrence is the foundation of 11 problems below.
+Whenever **two strings or sequences** are involved and you're asked to compare, transform, or find similarities.
+
+### Key Insight
+
+Compare characters:
+
+* Match → move both pointers
+* Don't match → skip one character from either string
 
 ```cpp
-// LCS — Top Down DP
-int lcs(string& a, string& b, int m, int n, vector<vector<int>>& dp) {
-    if (m == 0 || n == 0) return 0;
-    if (dp[m][n] != -1) return dp[m][n];
+int lcs(string& a, string& b, int m, int n,
+        vector<vector<int>>& dp) {
+
+    if (m == 0 || n == 0)
+        return 0;
+
+    if (dp[m][n] != -1)
+        return dp[m][n];
 
     if (a[m-1] == b[n-1])
-        return dp[m][n] = 1 + lcs(a, b, m-1, n-1, dp);       // match
-    else
-        return dp[m][n] = max(
-            lcs(a, b, m-1, n, dp),                             // skip from a
-            lcs(a, b, m, n-1, dp)                              // skip from b
-        );
+        return dp[m][n] = 1 + lcs(a, b, m-1, n-1, dp);
+
+    return dp[m][n] = max(
+        lcs(a, b, m-1, n, dp),
+        lcs(a, b, m, n-1, dp)
+    );
 }
 ```
 
-| # | Problem | Difficulty | File |
-|---|---|---|---|
-| 1 | Longest Common Subsequence (Recursive → Memoization → Top Down) — LC 1143 | 🟡 Medium | [`LongestCommonSubsequence.java`](./LongestCommonSubsequence.java) |
-| 2 | Longest Common Substring | 🟡 Medium | [`LongestCommonSubstring.java`](./LongestCommonSubstring.java) |
-| 3 | Printing LCS | 🟡 Medium | [`PrintingLCS.java`](./PrintingLCS.java) |
-| 4 | Shortest Common Supersequence — LC 1092 | 🟡 Medium | [`ShortestCommonSupersequence.java`](./ShortestCommonSupersequence.java) |
-| 5 | Minimum Insertions & Deletions to Convert String A to B | 🟡 Medium | [`MinInsertionsAndDeletions.java`](./MinInsertionsAndDeletions.java) |
-| 6 | Longest Palindromic Subsequence — LC 516 | 🟡 Medium | [`LongestPalindromicSubsequence.java`](./LongestPalindromicSubsequence.java) |
-| 7 | Minimum Deletions to Make String Palindrome | 🟡 Medium | [`MinDeletionsToPalindrome.java`](./MinDeletionsToPalindrome.java) |
-| 8 | Print Shortest Common Supersequence | 🟡 Medium | [`PrintShortestCommonSupersequence.java`](./PrintShortestCommonSupersequence.java) |
-| 9 | Longest Repeating Subsequence | 🟡 Medium | [`LongestRepeatingSubsequence.java`](./LongestRepeatingSubsequence.java) |
-| 10 | Sequence Pattern Matching | 🟢 Easy | [`SequencePatternMatching.java`](./SequencePatternMatching.java) |
-| 11 | Minimum Insertions to Make String Palindrome — LC 1312 | 🔴 Hard | [`MinInsertionsToPalindrome.java`](./MinInsertionsToPalindrome.java) |
+### Problems
+
+| #  | Problem                                         | Difficulty |
+| -- | ----------------------------------------------- | ---------- |
+| 1  | Longest Common Subsequence (LC 1143)            | 🟡 Medium  |
+| 2  | Longest Common Substring                        | 🟡 Medium  |
+| 3  | Printing LCS                                    | 🟡 Medium  |
+| 4  | Shortest Common Supersequence (LC 1092)         | 🟡 Medium  |
+| 5  | Minimum Insertions & Deletions                  | 🟡 Medium  |
+| 6  | Longest Palindromic Subsequence (LC 516)        | 🟡 Medium  |
+| 7  | Minimum Deletions to Make Palindrome            | 🟡 Medium  |
+| 8  | Print Shortest Common Supersequence             | 🔴 Hard    |
+| 9  | Longest Repeating Subsequence                   | 🟡 Medium  |
+| 10 | Sequence Pattern Matching                       | 🟢 Easy    |
+| 11 | Minimum Insertions to Make Palindrome (LC 1312) | 🔴 Hard    |
 
 ---
 
-### Pattern 4 — Matrix Chain Multiplication (MCM)
+# Pattern 4 — Matrix Chain Multiplication (MCM)
 
-**When to use:** You are given a **single sequence** and asked to split it optimally. The cost of splitting depends on both parts. Problems involving partitioning, parenthesization, or interval DP follow this pattern.
+### When to use
 
-**Key insight:** Unlike Knapsack (left to right) or LCS (two strings), MCM splits the problem by placing a **partition point `k`** somewhere between `i` and `j`. Try every possible `k` and take the best. This i–k–j loop is the signature of MCM-style DP.
+You are given a **single sequence** and must determine the optimal way to partition it.
+
+### Key Insight
+
+Try every partition point `k` between `i` and `j`.
 
 ```cpp
-// MCM General Format
-int solve(int i, int j, ..., vector<vector<int>>& dp) {
-    if (i >= j) return base_case;      // single element, no split possible
-    if (dp[i][j] != -1) return dp[i][j];
+int solve(int i, int j, vector<vector<int>>& dp) {
 
-    int ans = INT_MAX;                  // or INT_MIN depending on problem
-    for (int k = i; k < j; k++) {      // try every partition point
-        int cost = solve(i, k, ...) + solve(k+1, j, ...) + cost_of_combining;
-        ans = min(ans, cost);           // or max
+    if (i >= j)
+        return 0;
+
+    if (dp[i][j] != -1)
+        return dp[i][j];
+
+    int ans = INT_MAX;
+
+    for (int k = i; k < j; k++) {
+
+        int cost =
+            solve(i, k, dp) +
+            solve(k + 1, j, dp) +
+            cost_of_combining;
+
+        ans = min(ans, cost);
     }
+
     return dp[i][j] = ans;
 }
 ```
 
-| # | Problem | Difficulty | File |
-|---|---|---|---|
-| 1 | Matrix Chain Multiplication (Recursive → Memoization) | 🔴 Hard | [`MatrixChainMultiplication.java`](./MatrixChainMultiplication.java) |
-| 2 | Palindrome Partitioning (Recursive → Memoization → Optimized) — LC 132 | 🔴 Hard | [`PalindromePartitioning.java`](./PalindromePartitioning.java) |
-| 3 | Evaluate Expression to True / Boolean Parenthesization (Recursive → Memoized) | 🔴 Hard | [`BooleanParenthesization.java`](./BooleanParenthesization.java) |
-| 4 | Scrambled String (Recursive → Memoized) — LC 87 | 🔴 Hard | [`ScrambledString.java`](./ScrambledString.java) |
-| 5 | Egg Dropping Problem (Recursive → Memoization → Optimized) — LC 887 | 🔴 Hard | [`EggDropping.java`](./EggDropping.java) |
+### Problems
+
+| # | Problem                          | Difficulty |
+| - | -------------------------------- | ---------- |
+| 1 | Matrix Chain Multiplication      | 🔴 Hard    |
+| 2 | Palindrome Partitioning (LC 132) | 🔴 Hard    |
+| 3 | Boolean Parenthesization         | 🔴 Hard    |
+| 4 | Scrambled String (LC 87)         | 🔴 Hard    |
+| 5 | Egg Dropping (LC 887)            | 🔴 Hard    |
 
 ---
 
-### Pattern 5 — DP on Trees
+# Pattern 5 — DP on Trees
 
-**When to use:** The problem is on a **binary tree or general tree** and requires aggregating results from children to compute the answer at each node. Diameter, path sum, and subtree queries all follow this pattern.
+### When to use
 
-**Key insight:** Run a DFS. At each node, collect answers from left and right subtrees first (post-order). Combine them to compute the global answer, and return only the relevant value upward (usually the single best path — not both sides). The global answer and the return value are often **different**.
+Problems on binary trees where each node's answer depends on its children.
+
+### Key Insight
+
+Perform a **post-order DFS**.
+
+* Compute left subtree.
+* Compute right subtree.
+* Update a global answer.
+* Return only the value required by the parent.
 
 ```cpp
-// DP on Trees — post-order DFS template
-int dfs(TreeNode* node, int& globalAns) {
-    if (!node) return 0;
+int dfs(TreeNode* node, int& ans) {
 
-    int left  = max(0, dfs(node->left,  globalAns));   // gain from left
-    int right = max(0, dfs(node->right, globalAns));   // gain from right
+    if (!node)
+        return 0;
 
-    globalAns = max(globalAns, left + right + node->val);  // update global
+    int left = max(0, dfs(node->left, ans));
+    int right = max(0, dfs(node->right, ans));
 
-    return node->val + max(left, right);   // return single best path upward
+    ans = max(ans, left + right + node->val);
+
+    return node->val + max(left, right);
 }
 ```
 
-| # | Problem | Difficulty | File |
-|---|---|---|---|
-| 1 | Diameter of a Binary Tree — LC 543 | 🟢 Easy | [`DiameterOfBinaryTree.java`](./DiameterOfBinaryTree.java) |
-| 2 | Maximum Path Sum — Any Node to Any Node — LC 124 | 🔴 Hard | [`MaxPathSumAnyToAny.java`](./MaxPathSumAnyToAny.java) |
-| 3 | Maximum Path Sum — Leaf to Leaf | 🔴 Hard | [`MaxPathSumLeafToLeaf.java`](./MaxPathSumLeafToLeaf.java) |
+### Problems
+
+| # | Problem                                          | Difficulty |
+| - | ------------------------------------------------ | ---------- |
+| 1 | Diameter of Binary Tree (LC 543)                 | 🟢 Easy    |
+| 2 | Maximum Path Sum (Any Node to Any Node) (LC 124) | 🔴 Hard    |
+| 3 | Maximum Path Sum (Leaf to Leaf)                  | 🔴 Hard    |
 
 ---
 
-## Problems by Difficulty
+# Problems by Difficulty
 
-### 🟢 Easy (2)
-| Problem | Pattern | File |
-|---|---|---|
-| Sequence Pattern Matching | LCS | [`SequencePatternMatching.java`](./SequencePatternMatching.java) |
-| Diameter of a Binary Tree | DP on Trees | [`DiameterOfBinaryTree.java`](./DiameterOfBinaryTree.java) |
+## 🟢 Easy (2)
 
-### 🟡 Medium (18)
-| Problem | Pattern | File |
-|---|---|---|
-| 0/1 Knapsack | 0/1 Knapsack | [`01Knapsack.java`](./01Knapsack.java) |
-| Subset Sum Problem | 0/1 Knapsack | [`SubsetSum.java`](./SubsetSum.java) |
-| Equal Sum Partition Problem | 0/1 Knapsack | [`EqualSumPartition.java`](./EqualSumPartition.java) |
-| Count of Subsets with Given Sum | 0/1 Knapsack | [`CountOfSubsetsWithGivenSum.java`](./CountOfSubsetsWithGivenSum.java) |
-| Count Subsets with Given Difference | 0/1 Knapsack | [`CountSubsetsWithGivenDifference.java`](./CountSubsetsWithGivenDifference.java) |
-| Target Sum | 0/1 Knapsack | [`TargetSum.java`](./TargetSum.java) |
-| Unbounded Knapsack | Unbounded Knapsack | [`UnboundedKnapsack.java`](./UnboundedKnapsack.java) |
-| Rod Cutting Problem | Unbounded Knapsack | [`RodCutting.java`](./RodCutting.java) |
-| Coin Change — Max Ways | Unbounded Knapsack | [`CoinChangeMaxWays.java`](./CoinChangeMaxWays.java) |
-| Coin Change — Min Coins | Unbounded Knapsack | [`CoinChangeMinCoins.java`](./CoinChangeMinCoins.java) |
-| Longest Common Subsequence | LCS | [`LongestCommonSubsequence.java`](./LongestCommonSubsequence.java) |
-| Longest Common Substring | LCS | [`LongestCommonSubstring.java`](./LongestCommonSubstring.java) |
-| Printing LCS | LCS | [`PrintingLCS.java`](./PrintingLCS.java) |
-| Shortest Common Supersequence | LCS | [`ShortestCommonSupersequence.java`](./ShortestCommonSupersequence.java) |
-| Minimum Insertions & Deletions | LCS | [`MinInsertionsAndDeletions.java`](./MinInsertionsAndDeletions.java) |
-| Longest Palindromic Subsequence | LCS | [`LongestPalindromicSubsequence.java`](./LongestPalindromicSubsequence.java) |
-| Minimum Deletions to Make Palindrome | LCS | [`MinDeletionsToPalindrome.java`](./MinDeletionsToPalindrome.java) |
-| Longest Repeating Subsequence | LCS | [`LongestRepeatingSubsequence.java`](./LongestRepeatingSubsequence.java) |
-
-### 🔴 Hard (10)
-| Problem | Pattern | File |
-|---|---|---|
-| Minimum Subset Sum Difference | 0/1 Knapsack | [`MinimumSubsetSumDifference.java`](./MinimumSubsetSumDifference.java) |
-| Print Shortest Common Supersequence | LCS | [`PrintShortestCommonSupersequence.java`](./PrintShortestCommonSupersequence.java) |
-| Minimum Insertions to Make Palindrome | LCS | [`MinInsertionsToPalindrome.java`](./MinInsertionsToPalindrome.java) |
-| Matrix Chain Multiplication | MCM | [`MatrixChainMultiplication.java`](./MatrixChainMultiplication.java) |
-| Palindrome Partitioning | MCM | [`PalindromePartitioning.java`](./PalindromePartitioning.java) |
-| Boolean Parenthesization | MCM | [`BooleanParenthesization.java`](./BooleanParenthesization.java) |
-| Scrambled String | MCM | [`ScrambledString.java`](./ScrambledString.java) |
-| Egg Dropping Problem | MCM | [`EggDropping.java`](./EggDropping.java) |
-| Maximum Path Sum — Any to Any | DP on Trees | [`MaxPathSumAnyToAny.java`](./MaxPathSumAnyToAny.java) |
-| Maximum Path Sum — Leaf to Leaf | DP on Trees | [`MaxPathSumLeafToLeaf.java`](./MaxPathSumLeafToLeaf.java) |
+| Problem                   | Pattern     |
+| ------------------------- | ----------- |
+| Sequence Pattern Matching | LCS         |
+| Diameter of Binary Tree   | DP on Trees |
 
 ---
 
-## Quick Decision Guide
+## 🟡 Medium (18)
 
+| Problem                              | Pattern            |
+| ------------------------------------ | ------------------ |
+| 0/1 Knapsack                         | 0/1 Knapsack       |
+| Subset Sum                           | 0/1 Knapsack       |
+| Equal Sum Partition                  | 0/1 Knapsack       |
+| Count of Subsets with Given Sum      | 0/1 Knapsack       |
+| Count Subsets with Given Difference  | 0/1 Knapsack       |
+| Target Sum                           | 0/1 Knapsack       |
+| Unbounded Knapsack                   | Unbounded Knapsack |
+| Rod Cutting                          | Unbounded Knapsack |
+| Coin Change — Maximum Ways           | Unbounded Knapsack |
+| Coin Change — Minimum Coins          | Unbounded Knapsack |
+| Longest Common Subsequence           | LCS                |
+| Longest Common Substring             | LCS                |
+| Printing LCS                         | LCS                |
+| Shortest Common Supersequence        | LCS                |
+| Minimum Insertions & Deletions       | LCS                |
+| Longest Palindromic Subsequence      | LCS                |
+| Minimum Deletions to Make Palindrome | LCS                |
+| Longest Repeating Subsequence        | LCS                |
+
+---
+
+## 🔴 Hard (10)
+
+| Problem                                 | Pattern      |
+| --------------------------------------- | ------------ |
+| Minimum Subset Sum Difference           | 0/1 Knapsack |
+| Print Shortest Common Supersequence     | LCS          |
+| Minimum Insertions to Make Palindrome   | LCS          |
+| Matrix Chain Multiplication             | MCM          |
+| Palindrome Partitioning                 | MCM          |
+| Boolean Parenthesization                | MCM          |
+| Scrambled String                        | MCM          |
+| Egg Dropping                            | MCM          |
+| Maximum Path Sum (Any Node to Any Node) | DP on Trees  |
+| Maximum Path Sum (Leaf to Leaf)         | DP on Trees  |
+
+---
+
+# Quick Decision Guide
+
+```text
+Does the problem involve selecting items with weight/capacity?
+
+├── Use each item at most once?
+│      → 0/1 Knapsack
+│
+└── Use each item unlimited times?
+       → Unbounded Knapsack
+
+
+Are two strings or sequences given?
+
+├── Longest common part?
+├── Shortest common supersequence?
+├── String transformation?
+└── Palindrome subsequence?
+       → LCS Pattern
+
+
+Do you need to split a sequence optimally?
+
+├── Partition substrings?
+├── Parenthesization?
+└── Try every split point k?
+       → Matrix Chain Multiplication
+
+
+Is the input a tree?
+
+└── Combine results from children?
+       → DP on Trees
 ```
-Does the problem ask you to pick items with a weight/capacity constraint?
-├── Each item used at most once?         → 0/1 Knapsack (Pattern 1)
-└── Each item used unlimited times?      → Unbounded Knapsack (Pattern 2)
-
-Are two strings / sequences given?
-├── Find longest common part?            → LCS (Pattern 3)
-├── Find shortest common supersequence?  → LCS (Pattern 3)
-├── Convert one string to another?       → LCS (Pattern 3)
-└── Palindrome subsequence / insertions? → LCS (Pattern 3) — run LCS(s, reverse(s))
-
-Is a single sequence given and you need to split it optimally?
-├── Partition into substrings?           → MCM (Pattern 4)
-├── Parenthesization cost?               → MCM (Pattern 4)
-└── Try every split point k in [i, j]   → MCM (Pattern 4)
-
-Is the input a Binary Tree?
-└── Aggregate from children upward?      → DP on Trees (Pattern 5)
-    ├── Return single best path up
-    └── Update global answer at each node
-```
 
 ---
 
-## Pattern Summary
+# Pattern Summary
 
-| Pattern | Problems Solved | Key Technique |
-|---|---|---|
-| 1. 0/1 Knapsack | 7 | Take or leave each item once |
-| 2. Unbounded Knapsack | 4 | Take item, stay at same index |
-| 3. LCS | 11 | Match or skip from two sequences |
-| 4. MCM | 5 | Try every partition point k in \[i, j\] |
-| 5. DP on Trees | 3 | Post-order DFS, return vs global answer |
-| **Total** | **30** | |
-
----
+| Pattern                     | Problems Solved | Key Technique           |
+| --------------------------- | --------------: | ----------------------- |
+| 0/1 Knapsack                |               7 | Take or leave each item |
+| Unbounded Knapsack          |               4 | Reuse the same item     |
+| Longest Common Subsequence  |              11 | Match or skip           |
+| Matrix Chain Multiplication |               5 | Try every partition     |
+| DP on Trees                 |               3 | Post-order DFS          |
+| **Total**                   |          **30** |                         |
