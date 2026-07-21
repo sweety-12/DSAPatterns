@@ -111,3 +111,65 @@ public:
         
     }
 };
+
+
+TABULATION APPROACH:
+TC : O(n*target) and SC : O(n*target)
+
+class Solution {
+public:
+    bool tabulation_func(int ind, int target, vector<int>&nums,  int n , vector<vector<bool>>&dp){
+
+        //base case
+        for(int i=0; i<n; i++){
+            
+            dp[i][0] = true;
+        }
+
+        if(nums[0] <= target){
+
+            dp[0][nums[0]] = true;
+        }
+
+        //nested loop
+        for(int i=1; i<n; i++){
+            for(int tar = 1; tar <= target ; tar++){
+
+                bool not_taken = dp[i-1][tar];
+
+                bool taken = false;
+                if(nums[i] <= tar){
+                    taken = dp[i-1][tar - nums[i]];
+                }
+
+                dp[i][tar] = taken | not_taken;
+
+            }
+        }
+
+        return dp[n-1][target];
+    }
+    bool canPartition(vector<int>& nums) {
+
+        int n = nums.size();
+
+        int target =0;
+        int sum =0;
+
+        for(int i=0; i<n; i++){
+             sum += nums[i];
+        }
+
+        if(sum % 2 != 0)  return false; // odd summation can never be divided equally
+
+        target = sum/2;
+
+
+        //converting into memoization
+        vector<vector<bool>>dp(n, vector<bool>(target + 1, 0));
+
+        return tabulation_func(n-1, target, nums, n, dp);
+
+    }
+};
+    
