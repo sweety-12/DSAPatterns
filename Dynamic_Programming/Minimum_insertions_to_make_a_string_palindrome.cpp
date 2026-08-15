@@ -82,3 +82,54 @@ public:
        return n - longestPalindromeSubseq(s);
     }
 };
+
+
+TABULATION APPRAOCH:
+TC: O(n*n) and SC : O(n*n)
+    
+class Solution {
+public:
+    int longestPalindromeSubseq(string s1) {
+        
+        int n = s1.length();
+
+        string s2 = s1;
+        reverse(s2.begin(), s2.end());
+
+        vector<vector<int>>dp(n+1, vector<int>(n+1, 0));
+
+        //base case
+        for(int i =0; i<=n; i++) dp[0][i] = 0;
+        for(int j =0; j<=n; j++) dp[j][0] = 0;
+
+        //nested loop
+
+        for(int i=1; i<=n; i++){
+            for(int j =1; j<=n; j++){
+
+                if(s1[i-1] == s2[j-1]){
+
+                  dp[i][j] = 1 + dp[i -1][j -1];
+                }
+
+                  else dp[i][j] = 0 + max(dp[i -1][j], dp[i][j-1]);
+
+                }
+             }
+
+             return dp[n][n];
+    }
+    
+    int minInsertions(string s) {
+        
+       int n = s.length();
+       
+
+       return n - longestPalindromeSubseq(s);
+    }
+};
+
+
+
+
+
