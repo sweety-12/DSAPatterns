@@ -41,3 +41,44 @@ public:
     }
 };
 
+MEMOIZATION APPROACH:
+TC: O(n*n) and SC: O(n*n) + O(n+n)
+
+class Solution {
+public:
+    int func(int ind1, int ind2, string &text1, string &text2, vector<vector<int>>&dp){
+        //base case
+        if(ind1 < 0 || ind2 < 0){
+            return 0;
+        }
+
+        //overlapping subproblem
+        if(dp[ind1][ind2] != -1)  return dp[ind1][ind2];
+
+        //recursive call
+        if(text1[ind1] == text2[ind2]){
+
+            return  dp[ind1][ind2] = 1 + func(ind1 -1, ind2 -1, text1, text2, dp);
+        }
+
+        return dp[ind1][ind2] = 0 + max( func(ind1 -1, ind2, text1, text2, dp), func(ind1, ind2-1, text1, text2, dp));
+    }
+    int longestPalindromeSubseq(string s1) {
+        
+        int n = s1.length();
+
+        string s2 = s1;
+        reverse(s2.begin(), s2.end());
+
+        vector<vector<int>>dp(n, vector<int>(n, -1));
+
+        return func(n-1, n-1, s1, s2, dp);
+    }
+    int minInsertions(string s) {
+        
+       int n = s.length();
+       
+       
+       return n - longestPalindromeSubseq(s);
+    }
+};
