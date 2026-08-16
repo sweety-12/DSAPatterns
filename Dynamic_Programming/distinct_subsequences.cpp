@@ -52,3 +52,41 @@ public:
         return func(n-1, m-1, s, t);
     }
 };
+
+
+
+MEMOIZATION APPROACH:
+TC: O(n*m) and SC : O(n*m) + O(n+m)
+
+class Solution {
+public:
+    int func(int i, int j, string &s, string &t,  vector<vector<int>>&dp){
+
+        //base case
+        if(j<0)  return 1;
+        if(i<0)  return 0;
+
+        //overlapping subproblem
+        if(dp[i][j] != -1)  return dp[i][j];
+
+        //recursive call
+        if(s[i] == t[j]){
+            //take
+            // func(i-1, j-1, s, t, dp)   <- this one says, i ll pick the element from j and i both and move to next
+            //func(i-1, j, s, t, dp);  <- this one says, i ll not pick this character from i even it matches and will look for another occurence to compare with j
+            return dp[i][j] = func(i-1, j-1, s, t, dp) + func(i-1, j, s, t, dp);
+        }
+        //not take
+        // this says if does not matched then simply move to the next character in the first string.
+        return dp[i][j] = func(i-1, j, s, t, dp);
+
+    }
+    int numDistinct(string s, string t) {
+        
+        int n = s.length();
+        int m = t.length();
+
+        vector<vector<int>>dp(n+1, vector<int>(m+1, -1));
+        return func(n-1, m-1, s, t, dp);
+    }
+};
