@@ -92,3 +92,42 @@ public:
         return func(n-1, m-1, s1, s2, dp);
     }
 };
+
+TABULATION APPROACH:
+TC: O(n*m) and SC : O(n*m)
+
+class Solution {
+public:
+    int minDistance(string s1, string s2) {
+        
+        int n = s1.size();
+        int m = s2.size();
+
+        vector<vector<int>>dp(n+1, vector<int>(m+1, 0));
+        //base case
+        for(int i =0; i<=n ; i++){
+            dp[i][0] = i;   //deleting i elements from s1 as j is exhausted
+        }
+
+        for(int j=0; j<=m ; j++){
+            dp[0][j] = j;  //inserting j elements which matches which j as i is exhausted
+        }
+
+        //nested loop
+        for(int i=1 ; i<=n; i++){
+            for(int j =1; j<=m; j++){
+                if(s1[i-1] == s2[j-1]){
+                         dp[i][j] = dp[i-1][j-1];
+                        }
+
+                else {
+
+                    dp[i][j] = 1 + min(dp[i-1][j-1], min(dp[i-1][j], dp[i][j-1]));
+                } 
+
+            }
+        }
+
+        return dp[n][m];
+    }
+};
