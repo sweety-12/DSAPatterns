@@ -40,7 +40,7 @@ public:
 };
 
 MEMOIZATION APPROACH :
-TC : O(n * 2 * 3) and SC : O (n* 2* 3)
+TC : O(n * 2 * 3) and SC : O (n* 2* 3) + O(n) <- ASS
 
 class Solution {
 public:
@@ -68,5 +68,59 @@ public:
         //dp of size n*2*3
         vector<vector<vector<int>>>dp(n, vector<vector<int>>(2, vector<int>(3, -1)));
         return func(0, 1, 2, prices, n, dp);
+    }
+};
+
+TABULATION APPROACH :
+TC : O(n * 2 * 3) and SC : O (n* 2* 3)
+    
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        //TABULATION
+
+        int n = prices.size();
+        
+        //memoization
+        //dp of size n*2*3
+        vector<vector<vector<int>>>dp(n+1, vector<vector<int>>(2, vector<int>(3, 0)));
+        
+        //BASE CASE     <- WE CAN OMIT THESE BASE CASES COZ BOTH ARE RETURNING 0 AND DP VECTOR IS INITIALIZED WITH 0 SO ANYWAYS IT IS GOING TO RETURN 0
+        // for(int ind = n ; ind >= 0; ind--){
+        //     for(int buy = 0; buy <= 1; buy++){
+
+        //         dp[ind][buy][0] = 0;
+
+        //     }
+        // }
+
+        //  for(int buy = 0; buy <= 1; buy++){
+        //     for(int cap = 1; cap <= 2; cap++){
+
+        //         dp[n][buy][cap] = 0;
+
+        //     }
+        // }
+
+        //NESTED LOOPS
+        for(int ind = n-1 ; ind >= 0; ind--){
+            for(int buy = 0; buy <= 1; buy++){
+                for(int cap = 1; cap <= 2; cap++){
+
+
+                     if(buy == 0){
+                        dp[ind][buy][cap] = max( prices[ind] + dp[ind+1][1][cap-1], 0 + dp[ind +1][0][cap]);
+                    }
+
+                    else {
+                        dp[ind][buy][cap] = max (-prices[ind] + dp[ind +1][0][cap], 0 + dp[ind +1][1][cap]);
+
+                       } 
+                }
+            }
+        }
+
+
+        return dp[0][1][2];
     }
 };
