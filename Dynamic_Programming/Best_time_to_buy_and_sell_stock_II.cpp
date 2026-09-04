@@ -51,6 +51,9 @@ public:
 
         int n = prices.size();
 
+
+        // WHY ARE WE STARTING FROM 0 HERE IN THIS QUESTION AS WE MOSTLY STARTS FROM N-1 RIGHT?
+        // COZ DAYS ARE FIXED HERE WE WE MUST NEED TO BUY FIRST THEN SELL. EX-WE CANNOT BUY ON DAY N-1 AND SELL ON N-2.
         return func(0, 1, prices, n);
         
     }
