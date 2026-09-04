@@ -1,4 +1,4 @@
-//THIS IS EXACTLY THE SAME CODE OF BEST_TIME_TO_BUY_AND_SELL_STOCK_III 
+//THIS IS EXACTLY THE SAME CODE OF BEST_TIME_TO_BUY_AND_SELL_STOCK_III JUST THE QUESTION IS MODIFIED BY WORDS
 188. Best Time to Buy and Sell Stock IV
 You are given an integer array prices where prices[i] is the price of a given stock on the ith day, and an integer k.
 
@@ -74,5 +74,38 @@ public:
         vector<vector<vector<int>>>dp(n, vector<vector<int>>(2, vector<int>(k+1, -1)));
 
         return func(0, 1, k, prices, n, dp);
+    }
+};
+
+TABULATION APPROACH:
+TC: O (n*2*k) and SC : O(n *2*k)
+
+class Solution {
+public:
+    int maxProfit(int k, vector<int>& prices) {
+        
+        int n = prices.size();
+
+        //Tabulation
+        vector<vector<vector<int>>>dp(n+1, vector<vector<int>>(2, vector<int>(k+1, 0)));
+
+        //nested loops
+        for(int ind = n-1; ind >= 0 ; ind--){
+            for(int buy = 0 ; buy <= 1; buy ++){
+                for(int cap = 1; cap <= k; cap++){
+                     if(buy == 1){
+                        dp[ind][buy][cap] =  max(-prices[ind] + dp[ind + 1][0][cap], 
+                                        0 + dp[ind +1][1][cap]);  
+                    }
+
+                    else{
+                        dp[ind][buy][cap] = max (prices[ind] + dp[ind +1][1][cap-1], 
+                                0 + dp[ind +1][0][cap]); 
+                    }  
+                }
+            }
+        }
+
+        return dp[0][1][k];
     }
 };
