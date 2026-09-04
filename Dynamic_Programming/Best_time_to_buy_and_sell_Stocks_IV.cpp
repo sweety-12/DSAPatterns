@@ -39,3 +39,40 @@ public:
         return func(0, 1, k, prices, n);
     }
 };
+
+
+MEMOIZATION APPROAACH :
+TC : O(n*2*k) and SC : O(n*2*k) + O(n)
+
+class Solution {
+public:
+    int func(int ind, int buy, int cap, vector<int>&prices, int n,  vector<vector<vector<int>>>&dp){
+        //base 
+        if(cap == 0)  return 0;
+        if(ind == n) return 0;
+
+        //overlapaping condition
+        if(dp[ind][buy][cap] != -1)  return dp[ind][buy][cap];
+
+        //recursive calls
+        if(buy == 1){
+            return dp[ind][buy][cap] =  max(-prices[ind] + func(ind + 1, 0, cap, prices, n, dp), 
+                            0 + func(ind +1, 1, cap, prices, n, dp));  
+        }
+
+        return dp[ind][buy][cap] = max (prices[ind] + func(ind +1, 1, cap-1, prices, n, dp), 
+                    0 + func(ind +1, 0, cap, prices, n, dp)); 
+    }
+
+
+    int maxProfit(int k, vector<int>& prices) {
+        
+        int n = prices.size();
+
+        //memoization
+        //TC : n*2*k
+        vector<vector<vector<int>>>dp(n, vector<vector<int>>(2, vector<int>(k+1, -1)));
+
+        return func(0, 1, k, prices, n, dp);
+    }
+};
