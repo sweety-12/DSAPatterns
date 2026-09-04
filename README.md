@@ -1,13 +1,3 @@
-# DSAPatterns 🧠
-
----
-
-<p align="center">
-  <img src="./meme.png" alt="Forget to add base case in recursion — Andar toh aagaye, bahar kaise jaoge?" width="500"/>
-</p>
-
----
-
 ## 📌 About
 
 Welcome to **DSAPatterns** — the only repo you'll ever need to stop crying during FAANG/MAANG interviews. 🎯
