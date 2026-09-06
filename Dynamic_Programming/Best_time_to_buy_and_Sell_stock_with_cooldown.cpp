@@ -44,3 +44,34 @@ public:
     }
 };
  
+MEMOIZATION APPROACH:
+
+class Solution {
+public:
+    int func(int ind, int buy, vector<int>& prices, int n, vector<vector<int>>&dp){
+
+        //base case
+        if(ind >= n)  return 0;
+
+        //overlapping case
+        if(dp[ind][buy] != -1 ) return dp[ind][buy];
+
+        //recursive call
+        if(buy == 1){
+            return dp[ind][buy] = max(-prices[ind] + func(ind + 1, 0, prices, n, dp), 
+                            0    + func(ind + 1, 1, prices, n, dp));
+        }
+
+         return dp[ind][buy] = max(prices[ind] + func(ind + 2, 1, prices, n, dp), 
+                         0      + func(ind + 1, 0, prices, n, dp));
+    }
+    int maxProfit(vector<int>& prices) {
+
+        int n = prices.size();
+
+        vector<vector<int>>dp(n+1, vector<int>(2, -1));
+        return func(0, 1, prices, n, dp);
+        
+    }
+};
+
