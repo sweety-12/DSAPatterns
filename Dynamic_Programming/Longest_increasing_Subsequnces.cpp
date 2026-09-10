@@ -1,5 +1,4 @@
 300. Longest Increasing Subsequence
-
 Given an integer array nums, return the length of the longest strictly increasing subsequence.
 Example 1:
 
@@ -47,5 +46,37 @@ public:
         int n = nums.size();
 
         return func(0, -1, n, nums);
+    }
+};
+
+Memoization Approach:
+TC : O(n*n) and SC: o(n*n)
+
+class Solution {
+public:
+    int func(int ind, int prev, int n, vector<int>&nums, vector<vector<int>>&dp){
+        //base case
+        if(ind == n) return 0;
+
+        //overlapping case
+        if(dp[ind][prev+1] != -1)   return dp[ind][prev+1];
+
+        //recursive calls
+        // not take
+        int len =  0 + func(ind + 1, prev, n, nums, dp);
+
+        //take 
+        if(prev == -1 || nums[ind] > nums[prev]){
+            
+            len =  max(len,  1 + func(ind + 1, ind, n, nums, dp));
+        }
+
+        return dp[ind][prev+1] = len;
+    }
+    int lengthOfLIS(vector<int>& nums) {
+        int n = nums.size();
+
+        vector<vector<int>>dp(n, vector<int>(n+1, -1));
+        return func(0, -1, n, nums, dp);
     }
 };
