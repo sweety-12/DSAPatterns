@@ -50,7 +50,7 @@ public:
 };
 
 Memoization Approach:
-TC : O(n*n) and SC: o(n*n)
+TC : O(n*n) and SC: o(n*n) + O(n)
 
 class Solution {
 public:
@@ -78,5 +78,38 @@ public:
 
         vector<vector<int>>dp(n, vector<int>(n+1, -1));
         return func(0, -1, n, nums, dp);
+    }
+};
+
+Tabulation Approach:
+TC : O(n*n) and SC : O(n*n)
+
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        int n = nums.size();
+
+        vector<vector<int>>dp(n+1, vector<int>(n+1, 0));
+
+        //base case not needed coz dp array anyways returning 0
+        
+        //nested loop
+        for(int ind = n-1; ind >=0; ind--){
+            for(int prev = ind -1; prev >= -1; prev--){
+
+                //not take
+                 int len =  0 + dp[ind + 1][prev+1];
+
+                //take 
+                if(prev == -1 || nums[ind] > nums[prev]){
+                    
+                    len =  max(len,  1 + dp[ind + 1][ind+1]);
+                }
+
+                 dp[ind][prev + 1] = len;
+            }
+        }
+
+        return dp[0][-1+1];
     }
 };
