@@ -1,3 +1,5 @@
+//THESE APPROACHES ARE ONLY FINDING THE LENGTH OF THE LIS WE HEVEN'T WRITTEN FOR WHAT IS THE EXACT LIS , WE NEED TO FIGURE IT OUT.   THIS CAN BE THE FOLLOW UP QUESTION IN THE INTERVIEW.
+
 300. Longest Increasing Subsequence
 Given an integer array nums, return the length of the longest strictly increasing subsequence.
 Example 1:
@@ -146,5 +148,40 @@ public:
         }
 
         return next[-1+1];  // <- this +1 thing is index shifting
+    }
+};
+
+//ADDING THE BINARY SEARCH APPRAOCH
+TC: O(n log n) and SC : O(n)
+
+//USING BINARY SEARCH
+
+
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        
+        vector<int>temp;
+
+        temp.push_back(nums[0]);
+
+        for(int i=1; i<nums.size(); i++){
+
+                if(nums[i] > temp.back())   //adding the next big element in the subsequnce
+                {
+                    temp.push_back(nums[i]);
+                }
+
+                else{
+
+                    //finding the position to fit in or replace the next lower element
+                    int ind = lower_bound(temp.begin(), temp.end(), nums[i]) - temp.begin();
+
+                    temp[ind] = nums[i];   //replaced
+                }
+        }
+
+
+        return temp.size();
     }
 };
