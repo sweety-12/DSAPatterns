@@ -54,3 +54,48 @@ public:
     }
 };
 
+MEMOIZATION APPROACH:
+TC: O(c^3) AND SC: O(c^2)
+
+class Solution {
+public:
+    int func(int i, int j, vector<int>& cuts, vector<vector<int>>&dp){
+
+        //base case
+        if(i>j)  return 0;
+
+       
+        //overlapping subproblem
+        if(dp[i][j] != -1)  return dp[i][j];
+
+         int mini = 1e9;
+
+
+        //recursive call
+        for(int k = i; k<=j; k++){
+
+            int temp = cuts[j+1] - cuts[i-1] + 
+            func(i, k-1, cuts, dp) + func(k+1, j, cuts, dp);
+
+            mini = min(mini, temp);
+        }
+
+        return dp[i][j] = mini;
+
+    }
+
+    int minCost(int lenOfStick, vector<int>& cuts) {
+
+        int c = cuts.size();
+
+        cuts.push_back(lenOfStick);
+
+        cuts.insert(cuts.begin(), 0);
+
+        sort(cuts.begin(), cuts.end());
+
+        vector<vector<int>>dp(c+1, vector<int>(c+1, -1));        
+        return func(1,  c, cuts, dp);
+    }
+};
+
