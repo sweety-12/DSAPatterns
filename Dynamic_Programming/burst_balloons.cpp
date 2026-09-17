@@ -18,7 +18,7 @@ Input: nums = [1,5]
 Output: 10
 
 RECURSIVE APPROACH:
-TC: O(2^n) and SC : O(n)
+TC: exponential and SC : O(1)
 
 class Solution {
 public:
@@ -52,3 +52,43 @@ public:
     }
 };
 
+
+MEMOIZATION APPROACH:
+TC: O(n^3) and SC : O(n^2)
+
+class Solution {
+public:
+    int func(int i, int j, vector<int>& nums,  vector<vector<int>>&dp){
+
+        //base case
+        if(i > j) return 0;
+
+        int maxi = INT_MIN;
+
+        //overlapping subproblem
+        if(dp[i][j] != -1)  return dp[i][j];
+
+        //recursive call
+        for(int ind = i; ind <= j; ind++){
+
+            int cost = (nums[i-1] * nums[ind] * nums[j+1]) + 
+                       func(i, ind -1, nums, dp) + func(ind+1, j, nums, dp);
+
+            maxi = max(maxi, cost);
+        }
+       return dp[i][j] = maxi;
+    }
+
+    int maxCoins(vector<int>& nums) {
+
+        int n = nums.size();
+
+        nums.push_back(1);
+        nums.insert(nums.begin(), 1);
+
+        vector<vector<int>>dp(n+1, vector<int>(n+1, -1));
+
+        return func(1, n, nums, dp);
+        
+    }
+};
