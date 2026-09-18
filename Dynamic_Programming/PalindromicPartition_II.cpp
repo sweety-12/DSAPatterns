@@ -61,3 +61,52 @@ public:
         
     }
 };
+
+
+MEMOIZATION APPROACH:
+TC: O(n^3) and SC : O(n*n) + O(n)
+
+class Solution {
+public:
+    bool isPalindrome(string &s, int i, int j){
+
+        while( i<j){
+            if(s[i] != s[j])  return false;
+
+            i++;
+            j--;
+        }
+
+        return true;
+    }
+    int func(string &s, int i,  vector<int>&dp){
+        int n = s.length();
+
+        if(i == n || isPalindrome(s, i, n-1))  return 0;
+
+        //overlapping subproblem
+        if(dp[i] != -1)  return dp[i];
+
+        int mini = INT_MAX;
+
+        for(int j = i; j <n; j++){
+
+            if(isPalindrome(s, i, j)){
+                int cuts = 1 + func(s, j+1, dp);
+
+                mini = min(mini, cuts);
+            }
+        }
+
+        return dp[i] = mini;
+    }
+    int minCut(string s) {
+
+        int n = s.length();
+
+        vector<int>dp(n, -1);
+
+        return func(s, 0, dp);
+        
+    }
+};
