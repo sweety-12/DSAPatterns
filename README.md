@@ -1,18 +1,15 @@
 ## 📌 About
 
-Welcome to **DSAPatterns** — the only repo you'll ever need to stop crying during FAANG/MAANG interviews. 🎯
-
-This repository contains **all the major DSA patterns** asked by top tech companies like **Google, Amazon, Apple, Netflix, Meta** (and their desi cousins). Instead of grinding 500 random LeetCode problems like a headless chicken 🐔, learn the **patterns** — and suddenly everything clicks.
-
+Welcome to **DSAPatterns** — a self-initiated collection built while preparing for technical interviews at top tech companies.🎯
 
 ---
 
 ## 🚀 What's Inside?
 
 - ✅ **Optimized solutions** for every pattern — no brute force nonsense
-- ✅ **Time & Space complexity** breakdown for each approach
+- ✅ **Time & space complexity** breakdown for each approach
 - ✅ **Pattern recognition tips** — so you can spot the trick in the first 30 seconds of an interview
-- ✅ Covers all patterns asked in **FAANG/MAANG** company interviews
+- ✅ Covers patterns commonly asked across technical interviews at product-based and service-based companies
 
 ---
 
@@ -43,22 +40,12 @@ This repository contains **all the major DSA patterns** asked by top tech compan
 
 ---
 
-## 🎯 Who Is This For?
-
-- 👨‍💻 Anyone preparing for **FAANG/MAANG** interviews
-- 🧑‍🎓 Students who want to **crack placements** at top product companies
-- 😤 People who are tired of solving problems randomly without understanding *why*
-- 🇮🇳 Every desi engineer who has ever said *"Bhai ek baar pattern samajh aa jaye, sab ho jayega"*
-
----
-
 ## 💡 How to Use This Repo?
 
 1. **Pick a pattern** from the table above
 2. **Read the pattern explanation** — understand *when* and *why* to use it
 3. **Study the optimized solution** with comments
-4. **Practice the problems** listed under each pattern
-5. Profit. 💰 (a.k.a. get that FAANG offer letter)
+4. **Practice the problems** listed under each pattern.
 
 ---
 
