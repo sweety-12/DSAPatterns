@@ -38,7 +38,11 @@ int singleNonDuplicate(vector<int>& arr) {
             if(arr[mid -1] != arr[mid] && arr[mid]  != arr[mid+1]){
                 return arr[mid];
             }
-            //we are left
+                // The key observation comes from index positions. Before the single element appears, every pair
+                // starts at an even index. That means indices look like (0, 1), (2, 3), (4, 5), and so on.
+                //         After the single element appears, this pairing gets shifted by one position. 
+                //         Then pairs start at odd indices instead.
+                
             if((mid % 2 == 1 && arr[mid] == arr[mid-1]) || (mid % 2 == 0 && arr[mid] == arr[mid + 1])){
 
                 low = mid + 1;
