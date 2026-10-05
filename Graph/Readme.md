@@ -114,10 +114,17 @@ void bfs(int start,
 #### When to use
 
 * Connected components
-* Number of islands
+* Is there a path?
+* count islands/regions
 * Reachability
 * Flood fill
 * Visit every node exactly once
+
+### Tools:
+
+* DFS/BFS
+* Visited Array
+* Recursion on Queue
 
 #### Key Insight
 
@@ -152,13 +159,22 @@ for(int i=0;i<n;i++){
 
 ---
 
-### Pattern 2 — Shortest Path
+### Pattern 2 — Shortest Path (Minimize something under movement rules)
 
 #### When to use
 
-* Minimum steps
-* Minimum distance
-* Minimum cost
+* Minimum steps/distance/cost
+* Weighted vs unweighted
+* Grid With Costs
+
+#### Tools:
+
+* BFS(unweighted)
+* Dijkstra (Positive Weights)
+* 0-1 BFS
+* Bellman Ford (rare but sneaky)
+
+#### Interview Trap: People use Dijkstra when BFS is Enough.
 
 #### Key Insight
 
@@ -206,8 +222,14 @@ while(!q.empty()){
 #### When to use
 
 * Deadlock detection
-* Dependency validation
-* Graph validity
+* Prerequite Loop
+* Infinite Process
+
+#### Tools:
+
+* Visited + Recursion Stack(directed)
+* Parent Tracking(Undirected)
+* Topological Sort Failure
 
 #### Key Insight
 
@@ -239,17 +261,22 @@ Still in recursion stack
 
 ---
 
-### Pattern 4 — Topological Sort
+### Pattern 4 — Topological Sort (Order Tasks with dependencies)
 
 #### When to use
 
 * Course schedule
-* Build systems
-* Dependency ordering
+* Build order
+* Prerequisites
+
+#### Tools:
+
+* Kahn's Algorithm(BFS)
+* DFS finishing time
 
 #### Key Insight
-
-Topological ordering exists only for DAGs.
+* if topo sort exists -> No cycle exists use DAG
+* if not -> Cycle exists
 
 ```text
 Topo Sort Exists
@@ -279,21 +306,18 @@ for(auto neigh : adj[node]){
 
 ---
 
-### Pattern 5 — Multi-Source BFS
+### Pattern 5 — Multi-Source BFS  (Distance from multiple starting Points)
 
 #### When to use
 
-Signals:
+* Nearest source(x)
+* Time for Spread
+* Rotting/Infection/Fire
 
-* Nearest source
-* Spread
-* Infection
-* Fire
-* Rotting
+#### Tools:
 
-#### Key Insight
-
-Push ALL sources initially.
+* Push ALL sources initially.
+* Level Order BFS
 
 ```cpp
 for(int i=0;i<n;i++){
@@ -314,14 +338,18 @@ for(int i=0;i<n;i++){
 
 ---
 
-### Pattern 6 — Union Find (DSU)
+### Pattern 6 — Union Find (DSU)  - (Dynamic connectivity)
 
 #### When to use
 
-* Dynamic connectivity
+* Number of components after operations 
 * Edge additions
 * Redundant connections
-* Component counting
+
+#### Tools:
+
+* Parent, rank/size
+* Path Compression
 
 #### Key Insight
 
@@ -356,15 +384,21 @@ int find(int node){
 
 #### When to use
 
-* Matrix traversal
-* Islands
+* Matrix traversal/2D Grid
+* Islands/Obstacles
+* Move in directions
 * Shortest path in grid
 * Flood fill
 
+#### Tools:
+
+* BFS/DFS
+* Direction arrays
+* Boundary checks
+
 #### Key Insight
 
-A matrix is often just a graph in disguise.
-
+A matrix pretending to be a graph.
 Convert movement into directions.
 
 ```cpp
