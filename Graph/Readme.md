@@ -26,6 +26,12 @@ Dijkstra         → O(E log V)
 Space Complexity:
 Usually O(V + E)
 ```
+## Hand Written Graph Patterns Chart.
+---
+
+![Hand Written Graph Patterns Chart](Graph%20Patterns.jpeg)
+
+---
 
 > **Progress: 27 problems solved across 7 graph patterns**
 
