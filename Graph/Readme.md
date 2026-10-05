@@ -49,18 +49,37 @@ Use when:
 * Cycle detection (DFS variants)
 
 ```cpp
-void dfs(int node,
-         vector<vector<int>>& adj,
-         vector<int>& visited){
+void dfs(int node, vector<vector<int>>&adj, vector<int>&visited){
+    visited[node] =1;
 
-    visited[node] = 1;
-
-    for(auto neigh : adj[node]){
-        if(!visited[neigh]){
-            dfs(neigh, adj, visited);
+    for(const auto &nei : adj[node]){
+        if(!visited[nei]){
+            dfs(nei, adj, visited);
         }
     }
 }
+int countComponents(int n, vector<vector<int>&edges){
+    vector<vector<int>>adj(n);
+
+    for(auto it : edges){
+        adj[it[0]].push_back(it[1]);
+        adj[it[1]].push_back(it[0]);
+
+    }
+    
+    vector<int>visited(n, 0);
+    int components =0;
+
+    for(int i=0; i<n; i++){
+        if(!visited){
+            dfs(i, adj, visited);
+            components++;
+        }
+    }
+
+    return components
+}
+
 ```
 
 ### BFS Template
@@ -84,10 +103,10 @@ void bfs(int start,
         int node = q.front();
         q.pop();
 
-        for(auto neigh : adj[node]){
-            if(!visited[neigh]){
-                visited[neigh] = 1;
-                q.push(neigh);
+        for(const auto adj_node : adj[node]){
+            if(!visited[adj_node]){
+                visited[adj_node] = 1;
+                q.push(adj_node);
             }
         }
     }
@@ -196,20 +215,57 @@ Negative Weights     → Bellman Ford
 #### BFS Shortest Path
 
 ```cpp
-dist[src] = 0;
-
-while(!q.empty()){
-    int node = q.front();
-    q.pop();
-
-    for(auto neigh : adj[node]){
-        if(dist[neigh] == -1){
-            dist[neigh] = dist[node] + 1;
-            q.push(neigh);
-        }
-    }
+vector<int>shortestPath(int n , vector<vector<int>>&adj, int src){
+         vector<int>dist(n, -1);
+         queue<int>q;
+         q.push(src);
+         dist[src] = 0;
+         
+         while(!q.empty()){
+             int node = q.front();
+             q.pop();
+         
+             for(auto neigh : adj[node]){
+                 if(dist[neigh] == -1){
+                     dist[neigh] = dist[node] + 1;
+                     q.push(neigh);
+                 }
+             }
+     }
+   return dist;
 }
 ```
+
+### Dijkstra (Positive Weights > 1)
+
+```cpp
+vector<int>dijkstra(int n , vector<vector<pair<int, int>>>&adj, int src){
+         vector<int>dist(n, INT_MAX);
+         priority_queue<pair<int, int>, vector<pair<int, int>>, greater<>>pq;
+
+         dist[src] =0;
+         pq.push({0, src});
+
+         while(!pq.empty()){
+         {
+            auto[d, node] = pq.top();
+            pq.pop();
+
+            if(d > dist[node]) continue;
+
+            for(const auto & [adj_node, wt] : adj[node])
+            {
+                     if(dist[node] + wt < dist[adj_node])
+                           {
+                               dist[adj_node] = dist[node] + wt;
+                               pq.push({dist[adj_node], adj_node});
+                           }
+            }
+  }
+   return dist
+}
+```
+
 
 | # | Problem                                        | Difficulty |
 | - | ---------------------------------------------- | ---------- |
@@ -239,25 +295,52 @@ while(!q.empty()){
 
 #### Key Insight
 
-Undirected Graph:
+Undirected Graph: Cycle Detection -> DFS + Recursive Stack
 
-```text
-Visited neighbour
-AND
-Neighbour != Parent
+```cpp
+bool dfsCycle(int node, vector<vector<int>>&adj, vector<int>&visited, vector<int>&pathVis){
 
-⇒ Cycle
+    visited[node] =1;
+    pathVis[node] =1;
+
+    for(auto &adj_node : adj[node]){
+        if(!visited[adj_node]){
+            if(dfsCycle(adj_node, adj, visited, pathVis)){
+                return true;
+            }
+            else if(pathVis[adj_node]){
+                return true;
+            }
+        }
+    }
+
+    pathVis[node] = 0;
+    return false;
+}
 ```
 
-Directed Graph:
+Undirected Graph: DFS with Parent
 
-```text
-Visited neighbour
-AND
-Still in recursion stack
-
-⇒ Cycle
+```cpp
+bool dfs(int node, int parent, vector<vector<int>>&adj, vector<int>&visited){
+    visited[node] = 1;
+    for(auto &adj_node : adj[node]){
+        if(!visited[adj_node]){
+            if(dfs(adj_node, node, adj, visited)){
+                return true;
+            }
+        }
+        else if(adj_node != parent){
+            return true;
+        }
+    }
+    return false;
+}
 ```
+
+Directed - Kahn's (Cycle is detected if Topo is Incomplete)
+
+
 
 | # | Problem                          | Difficulty |
 | - | -------------------------------- | ---------- |
@@ -290,15 +373,54 @@ Topo Sort Exists
 No Cycle
 ```
 
-#### Kahn's Algorithm
+#### Kahn's Algorithm (BFS)
 
 ```cpp
-for(auto neigh : adj[node]){
-    indegree[neigh]--;
 
-    if(indegree[neigh] == 0){
-        q.push(neigh);
+vector<int>topo (int n, vector<vector<int>>&adj){
+    vector<int> indegree(n, 0);
+
+    for(int i =0; i < n; i++){
+        indegree[adj_node]++;
     }
+
+    queue<int>q;
+    for(int i=0; i<n; i++){
+        if(indegree[i] == 0) q.push(i);
+    }
+
+    vector<int>order 
+    while(!q.empty()){
+        int node = q.front();
+        q.pop();
+
+        order.push_back(node);
+
+        for(auto &adj_node : adj[node]){
+            indegree[adj_node]--;
+            if(indegree[adj_node] == 0){
+                q.push(adj_node);
+            }
+        }
+
+        if(order.size() != n) return {};
+    }
+    return order;
+}
+```
+
+DFS Fusing Time
+
+```cpp
+
+void dfs(int node, vector<vector<int>>&adj, vector<int>&visited, stack<int>&st){
+    visited[node] = 1;
+    for(auto &adj_node : adj[node]){
+        if(!visited[adj_node]){
+            dfs(adj_node, adj, visited, st);
+        }
+    }
+    st.push(node);
 }
 ```
 
@@ -326,12 +448,44 @@ for(auto neigh : adj[node]){
 * Level Order BFS
 
 ```cpp
-for(int i=0;i<n;i++){
-    for(int j=0;j<m;j++){
-        if(source){
-            q.push({i,j});
+
+int multiSourceBFS(vector<vector<int>>&grid){
+
+    int n = grid.size();
+    int m = grid[0].size();
+
+    queue<pair<int,int>>q;   
+    vector<vector<int>>dist(n, vector<int>(m, -1));
+
+    //push all sources
+    for(int i=0; i<n; i++){
+        for(int j=0; j<m; j++){
+            if(grid[i][j] == 1){
+                q.push({i,j});
+                dist[i][j] = 0;
+            }
         }
     }
+
+    int dRow[] = {-1, 0, +1, 0};
+    int dCol[] = {0, +1, 0, -1};
+
+    while(!q.empty()){
+        int row = q.front().first;
+        int col = q.front().second;
+        q.pop();
+
+        for(int i=0; i<4; i++){
+            int nRow = row + dRow[i];
+            int nCol = col + dCol[i];
+
+            if(nRow >= 0 && nRow < n && nCol >= 0 && nCol < m && dist[nRow][nCol] == -1){
+                dist[nRow][nCol] = dist[row][col] + 1;
+                q.push({nRow, nCol});
+            }
+        }
+    }
+
 }
 ```
 
@@ -368,11 +522,37 @@ Think DSU First
 #### DSU Template
 
 ```cpp
-int find(int node){
-    if(parent[node] == node)
-        return node;
+class DSU{
+    public:
+        vector<int>parent, size;
 
-    return parent[node] = find(parent[node]);
+        DSU(int n){
+            parent.resize(n);
+            size.resize(n, 1);
+            for(int i=0; i<n; i++){
+                parent[i] = i;
+            }
+        }
+
+        int find(int node){
+            if(node == parent[node]) return node;
+            return parent[node] = find(parent[node]);
+        }
+
+        void unionBySize(int u, int v){
+            int ulp_u = find(u);
+            int ulp_v = find(v);
+
+            if(ulp_u == ulp_v) return;
+
+            if(size[ulp_u] < size[ulp_v]){
+
+                swap(ulp_u, ulp_v);
+
+                parent[ulp_v] = ulp_u;
+                size[ulp_u] += size[ulp_v];
+            }
+        }
 }
 ```
 
@@ -408,8 +588,26 @@ A matrix pretending to be a graph.
 Convert movement into directions.
 
 ```cpp
-int drow[4] = {-1,0,1,0};
-int dcol[4] = {0,1,0,-1};
+
+void dfs(int row, int col, vector<vector<int>>&grid, vector<vector<int>>&visited){
+
+    int n = grid.size();
+    int m = grid[0].size();
+
+    visited[row][col] = 1;
+
+    int drow[] = {-1, 0, +1, 0};
+    int dcol[] = {0, +1, 0, -1};
+
+    for(int i=0; i<4; i++){
+        int nrow = row + drow[i];
+        int ncol = col + dcol[i];
+
+        if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m && grid[nrow][ncol] == 1 && !visited[nrow][ncol]){
+            dfs(nrow, ncol, grid, visited);
+        }
+    }
+}
 ```
 
 | # | Problem                           | Difficulty |
