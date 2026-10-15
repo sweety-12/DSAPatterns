@@ -109,3 +109,60 @@ public:
         return islands;
     }
 };
+
+
+APPROACH 3: USING BFS Solution
+TC: O(r*c) and SC: O(r*c)
+//BFS APPROACH
+
+class Solution {
+public:
+    void bfs(int i, int j, int row, int col, vector<vector<char>>& grid){
+
+        grid[i][j] = '2';
+        queue<pair<int, int>>q;
+
+        q.push({i, j});
+
+        while(!q.empty()){
+            
+            int r = q.front().first;
+            int c = q.front().second;
+
+            q.pop();
+
+            int drow[] = {1, 0, -1, 0};
+            int dcol[] = {0, 1, 0, -1};
+
+            for(int d =0; d<4; d++){
+
+                int nx = r + drow[d];
+                int ny = c + dcol[d];
+
+                if(nx >=0 && nx < row && ny >= 0 && ny <col && grid[nx][ny] == '1'){
+                    grid[nx][ny] = '2';
+                    q.push({nx, ny});
+                }
+            }
+        }
+    }
+    int numIslands(vector<vector<char>>& grid) {
+        int r = grid.size();
+        int c = grid[0].size();
+
+        int islands =0;
+
+        for(int i=0; i<r; i++){
+            for(int j =0; j<c; j++){
+
+                if(grid[i][j] == '1')
+                {
+                    bfs(i, j, r, c, grid);
+                    islands++;
+                }
+            }
+        }
+
+        return islands;
+    }
+};
