@@ -66,3 +66,46 @@ public:
         return islands;
     }
 };
+
+
+APPROACH 2: IF WE CAN MODIFY THE INPUT GRID.
+TC: O(r*c) and SC : O(1)
+  
+class Solution {
+public:
+    void dfs(int i, int j, int row, int col, vector<vector<char>>&grid){
+
+        //boundary conditions
+        if( i<0 || i>= row || j<0 || j>= col) return;
+
+        //if already visited 
+        if(grid[i][j] == '2' || grid[i][j] == '0') return;
+
+
+        grid[i][j] = '2';  //mark it as visited
+
+        dfs(i+1, j, row, col, grid);   //down
+        dfs(i, j+1, row, col, grid);   //right
+        dfs(i-1, j, row, col, grid);   //up
+        dfs(i, j-1, row, col, grid);   // left
+    }
+    int numIslands(vector<vector<char>>& grid) {
+        int r = grid.size();
+        int c = grid[0].size();
+
+        int islands =0;
+
+        for(int i=0; i<r; i++){
+            for(int j =0; j<c; j++){
+
+                if(grid[i][j] == '1')
+                {
+                    dfs(i, j, r, c, grid);
+                    islands++;
+                }
+            }
+        }
+
+        return islands;
+    }
+};
