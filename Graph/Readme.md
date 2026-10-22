@@ -1,4 +1,5 @@
 # Graph
+## one very important thing to take care of before solving any graph problem is, you must remember that graph questions are solved using a combination of patterns, not just one pattern. so, first try to think about which 2 or 3 patterns will work here.
 
 ## What is a Graph?
 
