@@ -69,3 +69,50 @@ public:
     }
 };
 
+
+APPROACH: DFS
+TC: O(V+E) and SC: O(V+E)
+
+class Solution {
+public:
+    void dfs(int node, vector<vector<int>>&graph, vector<int>&color, bool &bipar){
+
+            for(auto it : graph[node]){
+
+                //if the adjacent node is not colored, color it with opposite color
+                if(color[it] == -1){
+                    color[it] = !color[node];
+                    
+                    dfs(it, graph, color, bipar);
+                }
+
+                //means the adjacent node is already colored
+                else{
+
+                        if(color[it] == color[node]){
+                            bipar = false;
+                            return;
+                        }
+                }
+            }
+            return; 
+        }
+        
+    bool isBipartite(vector<vector<int>>& graph) {
+
+        int n = graph.size();
+
+      vector<int>color(n, -1);
+      bool bipar = true;
+
+      for(int i=0; i<n; i++){
+        if(color[i] == -1){
+            color[i] = 0;  //assign color to the first element of the graph
+            dfs(i, graph, color, bipar);
+            if(bipar == false)  return false;
+        }
+      }
+
+      return true;
+    }
+};
