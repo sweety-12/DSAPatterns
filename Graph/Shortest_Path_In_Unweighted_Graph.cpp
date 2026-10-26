@@ -14,7 +14,13 @@ Output: -1
 Explanation: There is no path between vertices 3 and 2.
 
 APPROACH: BFS
-TC: O(V+E) and SC: O(V)
+TC: O(V+E) and SC: O(V+E)
+
+Time Complexity: \(O(V+E)\)
+Building the adjacency list takes \(O(V+E)\) time. BFS visits each vertex at most once and examines each edge at most twice, so traversal also takes \(O(V+E)\) time. Therefore, the overall time complexity is \(O(V+E)\).
+
+Space Complexity: \(O(V)\) auxiliary space, excluding the adjacency list.
+The distance array and BFS queue each require at most \(O(V)\) space. The adjacency list requires an additional \(O(V+E)\) space, so the total extra space used by this implementation is \(O(V+E)\).
 
 class Solution {
   public:
