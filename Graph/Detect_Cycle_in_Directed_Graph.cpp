@@ -9,7 +9,7 @@ Input: adj = [[1], [2], [0, 3], []]
 Output: true
 Explanation: The diagram clearly shows a cycle 0 -> 1 -> 2 -> 0
 
-APPROACH : Kahn's Algo
+APPROACH : Kahn's Algo (BFS)
 TC: 
 Calculate indegree	 O(V+E)      //I got confused here with O(V*E) but if we notice we are not traversing every edges for all node, one node is connected with certain edge and next node with other 
 Push all zero-indegree vertices into queue	O(V)
@@ -91,6 +91,51 @@ class Solution {
         // - Removing that vertex and its outgoing edges eventually allows every vertex to be processed.
         // - In a graph with a directed cycle, the vertices in the cycle cannot become indegree 0 because they depend on one another.
         // - Consequently, fewer than n vertices are processed.
+        
+        return false;
+    }
+};
+
+APPROACH : Kahn's Algo (DFS)   //THIS IS NOT A USUAL APPROACH BUT I SOLVED IT BY JUST ADDING ONE LINE INDEGREE[IT] = -1;
+
+class Solution {
+  public:
+  
+    void dfs(int node, vector<int>&indegree, vector<int>&ans, vector<vector<int>>&adj){
+        
+        ans.push_back(node);
+        indegree[node] = -1;
+        
+        for(auto it : adj[node]){
+            indegree[it] --;
+            
+            if(indegree[it] == 0){
+                dfs(it, indegree, ans, adj);
+            }
+        }
+        
+    }
+    bool isCyclic(vector<vector<int>>& adj){
+        // code here
+        
+        int n = adj.size();
+        
+        vector<int>indegree(n, 0);
+        
+        for(int i=0; i<n; i++){
+            for(auto it : adj[i]){
+                indegree[it]++;
+            }
+        }
+        
+        vector<int>ans;
+        
+        for(int i=0; i<n ;i++){
+            if(indegree[i] == 0)
+             dfs(i, indegree, ans, adj);
+        }
+        
+        if(ans.size() != n)  return true;  //cycle exist
         
         return false;
     }
