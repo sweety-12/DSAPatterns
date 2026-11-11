@@ -1,3 +1,15 @@
+//APPROACH MULTISOURCE BFS
+
+//steps
+//1. declare the row and column size of the gird.
+//2. We do not need any visited array concept here, instead we will just have a minutes variables which will be our ans.
+//3. Declare queue and this will store the i, j
+//4. first traverse into the grid and count fresh and if rotten store that into queue.
+//5. must declare the drow and dcol
+//6. Start traversing using while loop 
+//7. must take care of the loop which will first execute the already stored rotten organges and then comes to the newly added oranges in the next minute.
+
+
 994. Rotting Oranges
 You are given an m x n grid where each cell can have one of three values:
 
